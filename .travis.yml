@@ -3,7 +3,7 @@ language: bash
 install:
   - brew update
   - brew tap nrobinson2000/NewPo
-  - brew install po
+  - brew install NewPo
   - ./config-expect.sh
   - po install
 script:
