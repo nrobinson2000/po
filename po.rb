@@ -15,12 +15,12 @@
 #  po-util - The Ultimate Local Particle Experience for Linux and macOS
 # Copyright (C) 2017  Nathan Robinson
 
-class NewPo < Formula
+class Newpo < Formula
   desc "Particle Offline Utility: The Ultimate Local Particle Experience"
   homepage 'https://po-util.com'
   head 'https://github.com/nrobinson2000/homebrew-NewPo', :using => :git
-  url 'https://github.com/nrobinson2000/po/archive/0.0.1.tar.gz'
-  sha256 '7e0af06f74270a4d0f7010f7fcde66b44269577b94b79819764e94432ab821c5'
+  url 'https://github.com/nrobinson2000/po/archive/0.0.3.tar.gz'
+  sha256 '4d7a03a216158b62b643c533defd7fbb7d73ef56a600ed6f62df449a7c6f18f0'
 
   def install
     bin.install 'po'
