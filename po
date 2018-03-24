@@ -30,14 +30,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #### Common functions
-source "po-common"
+source "/usr/local/share/po-common"
 
 #### OS dependent features
 if [[ "$(uname -s)" == "Linux" ]];
 then
-  source "po-linux"
+  source "/usr/local/share/po-linux"
 else
-  source "po-mac"
+  source "/usr/local/share/po-mac"
 fi
 
 #### Parse arguments
