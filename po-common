@@ -211,7 +211,7 @@ validateDevicePlatform()
     red_echo "Please choose \"photon\", \"P1\", \"electron\", \"core\", \"pi\", or \"duo\",
   or choose a proper command."
     common_commands
-    exit
+    exit 1
   fi
   if [ "$DEVICE_TYPE" == "photon" ];
   then
@@ -968,7 +968,7 @@ exit
 
 _init()
 {
-  if validateDevicePlatform "$1" ;
+  if [[ ! $(validateDevicePlatform "$1") ]] ;
   then
     DEVICE_TYPE="$1"
     FOLDER="$2"
