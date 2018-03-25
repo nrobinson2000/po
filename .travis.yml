@@ -1,9 +1,10 @@
-os: osx
+os:
+  - linux
+  - osx
 language: bash
 install:
-  - brew update
-  - brew tap nrobinson2000/NewPo
-  - brew install NewPo
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; ci/mac ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; ci/linux ; fi
   - ./config-expect.sh
   - po install
 script:

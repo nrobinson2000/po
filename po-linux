@@ -41,22 +41,28 @@ Please install \"curl\" with your package manager.
     exit
   fi
 
-  if [ -f po-util.sh ];
+  if [ -f po ];
   then
     if [ "$CWD" != "$HOME" ];
     then
-      cp po-util.sh ~/po-util.sh #Replace ~/po-util.sh with one in current directory.
+      cp po ~/po #Replace ~/po with one in current directory.
     fi
-    chmod +x ~/po-util.sh
+    chmod +x ~/po
   else
-    if [ -f ~/po-util.sh ];
+    if [ -f ~/po ];
     then
-      chmod +x ~/po-util.sh
+      chmod +x ~/po
     else
-    curl -fsSLo ~/po-util.sh https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util.sh
-    chmod +x ~/po-util.sh
+    curl -fsSLo ~/po https://raw.githubusercontent.com/nrobinson2000/po/master/po
+    chmod +x ~/po
     fi
   fi
+
+  sudo rm /usr/local/share/po-common
+  sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/po-common
+
+  sudo rm /usr/local/share/po-linux
+  sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/po-linux
 
   if [ -f /usr/local/bin/po ]
   then
@@ -64,7 +70,7 @@ Please install \"curl\" with your package manager.
     "
   else
     blue_echo "Creating \"po\" link in /usr/local/bin..."
-    sudo ln -s ~/po-util.sh /usr/local/bin/po
+    sudo ln -s ~/po /usr/local/bin/po
   fi
 
   blue_echo "Installing bash completion for po..."
@@ -421,13 +427,21 @@ _update()
 
     echo
     blue_echo "Updating po-util.."
-    rm ~/po-util.sh
-    curl -fsSLo ~/po-util.sh https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util.sh
-    chmod +x ~/po-util.sh
+
+    sudo rm /usr/local/share/po-common
+    sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/po-common
+
+    sudo rm /usr/local/share/po-linux
+    sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/po-linux
+
+    rm ~/po
+    curl -fsSLo ~/po https://raw.githubusercontent.com/nrobinson2000/po/master/po
+    chmod +x ~/po
+
     rm -f ~/.po-util/doc/po-util-README.md
     curl -fsSLo ~/.po-util/doc/po-util-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util-README.md
-    curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/homebrew-po/master/man/po.1
 
+    curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/homebrew-po/master/man/po.1
     sudo mv po.1 /usr/local/share/man/man1/
     sudo mandb &> /dev/null
 
