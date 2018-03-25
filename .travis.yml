@@ -3,8 +3,8 @@ os:
   - osx
 language: bash
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; ci/mac ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; ci/linux ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ci/mac ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ci/linux ; fi
   - ./config-expect.sh
   - po install
 script:
