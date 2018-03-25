@@ -12,9 +12,6 @@ install:
 script:
   - po init test && cd test
   - po photon build
-  - po electron clean
   - po electron build
-  - po P1 clean
   - po P1 build
-  - po core clean
   - po core build
