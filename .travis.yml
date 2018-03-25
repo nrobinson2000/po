@@ -2,6 +2,7 @@ os:
   - linux
   - osx
 language: bash
+sudo: required
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ci/mac ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ci/linux ; fi
