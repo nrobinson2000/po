@@ -6,6 +6,7 @@ sudo: required
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash -x ci/mac ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash -x ci/linux ; fi
+  - po
   - ./config-expect.sh
   - po install
 script:
