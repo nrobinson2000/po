@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/nrobinson2000/po.svg?branch=master)](https://travis-ci.org/nrobinson2000/po)
 # po
 ## The Future of [po-util](https://github.com/nrobinson2000/po-util): Refactored, Modular, and Cross-Compatible
 **Po is in beta, but fully functional.**
@@ -41,3 +42,6 @@ Universal Installer:
 ```
 $ bash <(curl -sL https://raw.githubusercontent.com/nrobinson2000/po/master/install)
 ```
+
+# Caveats:
+None at the moment. Just make sure to use the Universal Installer.
