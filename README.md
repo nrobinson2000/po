@@ -18,7 +18,7 @@ My solution was to reunite the Mac and Linux versions back into a single reposit
 ```
 
 * `po` is the main file, and the script that gets executed when a user runs `po` at the command line.
-* `po-common` is sourced by `po`, and contains all of the OS independent functions.
+* `po-common` is sourced by `po`, and contains all OS independent functions.
 * `po-linux` and `po-mac` contain the OS dependent settings and functions.
 
 Regardless of OS:
