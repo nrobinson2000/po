@@ -4,8 +4,8 @@ os:
 language: bash
 sudo: required
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ci/mac ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ci/linux ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash -x ci/mac ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash -x ci/linux ; fi
   - ./config-expect.sh
   - po install
 script:
