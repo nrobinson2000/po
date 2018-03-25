@@ -41,37 +41,10 @@ Please install \"curl\" with your package manager.
     exit
   fi
 
-  if [ -f po ];
-  then
-    if [ "$CWD" != "$HOME" ];
-    then
-      cp po ~/po #Replace ~/po with one in current directory.
-    fi
-    chmod +x ~/po
-  else
-    if [ -f ~/po ];
-    then
-      chmod +x ~/po
-    else
-    curl -fsSLo ~/po https://raw.githubusercontent.com/nrobinson2000/po/master/po
-    chmod +x ~/po
-    fi
-  fi
-
-  sudo rm /usr/local/share/po-common
   sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/po-common
-
-  sudo rm /usr/local/share/po-linux
   sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/po-linux
-
-  if [ -f /usr/local/bin/po ]
-  then
-    blue_echo "po already linked in /usr/local/bin.
-    "
-  else
-    blue_echo "Creating \"po\" link in /usr/local/bin..."
-    sudo ln -s ~/po /usr/local/bin/po
-  fi
+  sudo curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/po
+  sudo chmod +x /usr/local/bin/po
 
   blue_echo "Installing bash completion for po..."
   sudo curl -fsSLo /etc/bash_completion.d/po https://raw.githubusercontent.com/nrobinson2000/homebrew-po/master/completion/po
