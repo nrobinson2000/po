@@ -43,5 +43,12 @@ Universal Installer:
 $ bash <(curl -sL https://raw.githubusercontent.com/nrobinson2000/po/master/install)
 ```
 
-# Caveats:
+## Caveats:
 None at the moment. Just make sure to use the Universal Installer.
+
+## FAQ:
+
+**Is this really the future of po-util?**
+
+Yes. All future development will be on po. The legacy po-util repositories will
+remain supported, but future work will be focused on po.
