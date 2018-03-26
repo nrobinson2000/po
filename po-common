@@ -839,7 +839,7 @@ targets:
       - --multi
     cmd: po
     keymap: ctrl-alt-5
-    name: DFU
+    name: OTA
           " >> "$FIRMWAREDIR/../.atom-build.yml"
 
   mkdir -p "$FIRMWAREDIR/../ci"
