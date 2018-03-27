@@ -779,10 +779,21 @@ initProject()
     then
       echo
       green_echo "Directory is already Initialized!"
+      echo "Would you like to regenerate it?"
+      read -rp "(Firmware will not be touched.) (yes/no): " answer
+      if [ "$answer" == "yes" ] || [ "$answer" == "y" ] || [ "$answer" == "Y" ];
+      then
+        REGENERATE_DIR="true"
+        echo
+        blue_echo "Regenerating..."
+      else
+        blue_echo "Not Regenerating."
       echo
       exit
+      fi
     fi
 
+if [[ "$REGENERATE_DIR" != "true" ]]; then
     mkdir -p "$FIRMWAREDIR"
     echo "#include \"Particle.h\"
 
@@ -796,7 +807,8 @@ void loop() // Put code here to loop forever
 
 }" > "$FIRMWAREDIR/main.cpp"
 
-      cp "$HOME/.po-util/doc/po-util-README.md" "$FIRMWAREDIR/../README.md"
+  cp "$HOME/.po-util/doc/po-util-README.md" "$FIRMWAREDIR/../README.md"
+fi
 
       if [ "$DEVICE_TYPE" != "" ];
       then
@@ -840,11 +852,11 @@ targets:
     cmd: po
     keymap: ctrl-alt-5
     name: OTA
-          " >> "$FIRMWAREDIR/../.atom-build.yml"
+          " > "$FIRMWAREDIR/../.atom-build.yml"
 
   mkdir -p "$FIRMWAREDIR/../ci"
 
-  echo "dist: trusty
+  echo 'dist: trusty
 sudo: required
 language: generic
 
@@ -853,7 +865,7 @@ script:
 
 cache:
   directories:
-  - $HOME/bin" > "$FIRMWAREDIR/../.travis.yml"
+  - $HOME/.po-util' > "$FIRMWAREDIR/../.travis.yml"
 
   echo "#!/bin/bash
 bash <(curl -sL https://master.po-util.com/ci-install)
