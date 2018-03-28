@@ -407,9 +407,9 @@ _update()
     sudo rm /usr/local/share/po-linux
     sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/po-linux
 
-    rm ~/po
-    curl -fsSLo ~/po https://raw.githubusercontent.com/nrobinson2000/po/master/po
-    chmod +x ~/po
+    # rm ~/po
+    # curl -fsSLo ~/po https://raw.githubusercontent.com/nrobinson2000/po/master/po
+    # chmod +x ~/po
 
     rm -f ~/.po-util/doc/po-util-README.md
     curl -fsSLo ~/.po-util/doc/po-util-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util-README.md
