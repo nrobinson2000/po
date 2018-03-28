@@ -151,3 +151,5 @@ _po-util()
 }
 
 complete -F _po-util po
+alias po-util="/usr/local/bin/po"
+complete -F _po-util po-util
