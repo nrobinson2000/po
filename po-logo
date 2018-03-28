@@ -1,0 +1,57 @@
+#!/bin/bash
+
+TEXTLINE="$1"
+
+LOGO="
+          ______    ______
+         /      \  /      \    Copyright (GPL) 2017 Nathan D. Robinson
+        /██████  |/██████  |
+        ██ |  ██ |██ |  ██ |   Usage: po DEVICE_TYPE COMMAND DEVICE_NAME
+        ██ |__██ |██ \__██ |          po DFU_COMMAND
+        ██    ██/ ██    ██/           po install [full_install_path]
+        ███████/   ██████/            po library LIBRARY_COMMAND
+        ██ |
+        ██ |                       Run \"man po\" for help.
+        ██/  $TEXTLINE
+"
+
+LOGOCOLOR="
+$(tput setaf 6)$(tput bold)          ______    ______
+$(tput setaf 6)$(tput bold)         /      \  /      \    $(tput sgr0)Copyright (GPL) 2017 Nathan D. Robinson
+$(tput setaf 6)$(tput bold)        /██████  |/██████  |
+$(tput setaf 6)$(tput bold)        ██ |  ██ |██ |  ██ |   $(tput sgr0)Usage: po DEVICE_TYPE COMMAND DEVICE_NAME
+$(tput setaf 6)$(tput bold)        ██ |__██ |██ \__██ |          $(tput sgr0)po DFU_COMMAND
+$(tput setaf 6)$(tput bold)        ██    ██/ ██    ██/           $(tput sgr0)po install [full_install_path]
+$(tput setaf 6)$(tput bold)        ███████/   ██████/            $(tput sgr0)po library LIBRARY_COMMAND
+$(tput setaf 6)$(tput bold)        ██ |
+$(tput setaf 6)$(tput bold)        ██ |                       $(tput sgr0)Run \"man po\" for help.
+$(tput setaf 6)$(tput bold)        ██/  $TEXTLINE$(tput sgr0)
+"
+
+
+
+
+
+# echo "Copyright (GPL) 2017 Nathan D. Robinson
+#
+# Usage: po DEVICE_TYPE COMMAND DEVICE_NAME
+#        po DFU_COMMAND
+#        po install [full_install_path]
+#        po library LIBRARY_COMMAND
+#
+# Run \"man po\" for help.
+# "
+
+
+
+    echo "Copyright (GPL) 2017 Nathan D. Robinson
+
+    Usage: po DEVICE_TYPE COMMAND DEVICE_NAME
+           po DFU_COMMAND
+           po install [full_install_path]
+           po library LIBRARY_COMMAND
+
+    Run \"man po\" for help.
+    "
+
+echo "$LOGOCOLOR"
