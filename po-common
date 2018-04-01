@@ -9,65 +9,35 @@ pause()
 
 print_logo()
 {
-  if [ "$1" ];
-  then
-    TEXTLINE="$1"
-  else
-    TEXTLINE="https://po-util.com"
-  fi
-
-LOGO="                                                     __      __  __
-                                                    /  |    /  |/  |
-              ______    ______           __    __  _██ |_   ██/ ██ |
-             /      \  /      \  ______ /  |  /  |/ ██   |  /  |██ |
-            /██████  |/██████  |/      |██ |  ██ |██████/   ██ |██ |
-            ██ |  ██ |██ |  ██ |██████/ ██ |  ██ |  ██ | __ ██ |██ |
-            ██ |__██ |██ \__██ |        ██ \__██ |  ██ |/  |██ |██ |
-            ██    ██/ ██    ██/         ██    ██/   ██  ██/ ██ |██ |
-            ███████/   ██████/           ██████/     ████/  ██/ ██/
-            ██ |
-            ██ |
-            ██/                  $TEXTLINE
-"
-  if [ -t 1 ];
-  then
-      echo "$(tput setaf 6)$(tput bold)$LOGO$(tput sgr0)"
-  else
-      echo "$LOGO"
-  fi
-}
-
-new_logo()
-{
-if [ -t 1 ]; then
-LOGO="
+  if [ -t 1 ]; then
+  LOGO="
 $(tput setaf 6)$(tput bold)          ______    ______
-$(tput setaf 6)$(tput bold)         /      \  /      \    $(tput sgr0)Copyright (GPL) 2017 Nathan D. Robinson
+$(tput setaf 6)$(tput bold)         /      \  /      \    $(tput sgr0)$TITLELINE
 $(tput setaf 6)$(tput bold)        /██████  |/██████  |
-$(tput setaf 6)$(tput bold)        ██ |  ██ |██ |  ██ |   $(tput sgr0)Usage: po DEVICE_TYPE COMMAND DEVICE_NAME
-$(tput setaf 6)$(tput bold)        ██ |__██ |██ \__██ |          $(tput sgr0)po DFU_COMMAND
-$(tput setaf 6)$(tput bold)        ██    ██/ ██    ██/           $(tput sgr0)po install [full_install_path]
-$(tput setaf 6)$(tput bold)        ███████/   ██████/            $(tput sgr0)po library LIBRARY_COMMAND
+$(tput setaf 6)$(tput bold)        ██ |  ██ |██ |  ██ |   $(tput sgr0)$USAGELINE
+$(tput setaf 6)$(tput bold)        ██ |__██ |██ \__██ |     $(tput sgr0)$USAGELINE1
+$(tput setaf 6)$(tput bold)        ██    ██/ ██    ██/      $(tput sgr0)$USAGELINE2
+$(tput setaf 6)$(tput bold)        ███████/   ██████/       $(tput sgr0)$USAGELINE3
 $(tput setaf 6)$(tput bold)        ██ |
-$(tput setaf 6)$(tput bold)        ██ |                      $(tput sgr0)Run \"man po\" for help.
+$(tput setaf 6)$(tput bold)        ██ |                     $(tput sgr0)$HELPLINE
 $(tput setaf 6)$(tput bold)        ██/  $(tput setaf 2)$TEXTLINE$(tput sgr0)
-"
-else
-LOGO="
+  "
+  else
+  LOGO="
           ______    ______
-         /      \  /      \    Copyright (GPL) 2017 Nathan D. Robinson
+         /      \  /      \    $TITLELINE
         /██████  |/██████  |
-        ██ |  ██ |██ |  ██ |   Usage: po DEVICE_TYPE COMMAND DEVICE_NAME
-        ██ |__██ |██ \__██ |          po DFU_COMMAND
-        ██    ██/ ██    ██/           po install [full_install_path]
-        ███████/   ██████/            po library LIBRARY_COMMAND
+        ██ |  ██ |██ |  ██ |   $USAGELINE
+        ██ |__██ |██ \__██ |     $USAGELINE1
+        ██    ██/ ██    ██/      $USAGELINE2
+        ███████/   ██████/       $USAGELINE3
         ██ |
-        ██ |                      Run \"man po\" for help.
+        ██ |                   $HELPLINE
         ██/  $TEXTLINE
-"
-fi
+  "
+  fi
 
-echo "$LOGO"
+  echo "$LOGO"
 }
 
 blue_echo()
@@ -510,7 +480,13 @@ fi
 build_firmware()
 {
     store_build_parameters
-    print_logo "Building firmware for $DEVICE_TYPE..."
+
+TITLELINE="Building firmware..."
+USAGELINE="Build Parameters:"
+USAGELINE1="$DEVICE_TYPE"
+USAGELINE2="$(cd $FIRMWAREDIR/.. && basename $PWD)"
+TEXTLINE="po $DEVICE_TYPE build $USAGELINE2"
+print_logo
 
   if [ "$DEVICE_TYPE" == "duo" ];
   then
@@ -955,8 +931,14 @@ installNodeVersion()
 
 _help()
 {
+  TITLELINE="Copyright (GPL) 2017 Nathan D. Robinson"
+  USAGELINE="Usage: po DEVICE_TYPE COMMAND DEVICE_NAME"
+  USAGELINE1="     po DFU_COMMAND"
+  USAGELINE2="     po install [full_install_path]"
+  USAGELINE3="     po library LIBRARY_COMMAND"
+  HELPLINE="Run \"man po\" for help."
   TEXTLINE="https://po-util.com"
-  new_logo
+  print_logo
   exit
 }
 
@@ -1317,11 +1299,14 @@ in \"$PROJECTDIR\". Feel free to use either when sharing your firmware."
 
 _lib-help()
 {
-  print_logo
-echo "\"po library\": The Particle Library manager for po-util.
-
-For help, read the LIBRARY MANAGER section of \"man po\"
-"
+TITLELINE="po library: The Particle Library manager for po"
+USAGELINE="Common commands:"
+USAGELINE1="clean, setup, get, install, purge, create, add,"
+USAGELINE2="remove, rm, list, ls, pack, export, update,"
+USAGELINE3="refresh, source, src, view-headers, examples"
+HELPLINE="Help: LIBRARY MANAGER of \"man po\""
+TEXTLINE="po lib help"
+print_logo
 exit
 }
 
@@ -1412,16 +1397,14 @@ echo
 
 _lib-ex-help()
 {
-  print_logo
-
-echo "\"po lib ex\": Particle Library Example Manager
-
-ls - List the examples in a library
-
-load - Load an example from a library
-
-For help, read the LIBRARY EXAMPLE MANAGER section of \"man po\"
-"
+TITLELINE="po lib ex: Particle Library Example Manager"
+USAGELINE="Usage: po lib ex ls LIBRARY_NAME"
+USAGELINE1="        - List the examples in a library"
+USAGELINE2="     po lib ex load LIBRARY_NAME"
+USAGELINE3="        - Load an example from a library"
+HELPLINE="Help: LIBRARY EXAMPLE MANAGER of \"man po\""
+TEXTLINE="po lib ex"
+print_logo
 exit
 }
 
@@ -1748,7 +1731,6 @@ _build()
   then
     exit
   fi
-    echo
     build_firmware || exit
 
     if [[ "$DEVICE_TYPE" != "pi" ]]; then
