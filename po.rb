@@ -19,8 +19,8 @@ class Newpo < Formula
   desc "Particle Offline Utility: The Ultimate Local Particle Experience"
   homepage 'https://po-util.com'
   head 'https://github.com/nrobinson2000/homebrew-NewPo', :using => :git
-  url 'https://github.com/nrobinson2000/po/archive/0.1.1.tar.gz'
-  sha256 '0c54db7ba02816a477accc5c931d16f669641ad940caac0fe658a9953d08c8b9'
+  url 'https://github.com/nrobinson2000/po/archive/0.1.2.tar.gz'
+  sha256 '6aa890dbb00f3e09b9f89c14d42ea6769a7c07576e587d419ff5dfee2cb05d6f'
 
   def install
     bin.install 'po'
