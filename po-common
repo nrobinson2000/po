@@ -474,12 +474,13 @@ fi
   RAMPERCENT=$(bc -l <<< "scale = 4; $RAM / $RAMTOTAL * 100")
   echo
 
-  if [[ -t 1 ]];
+  if [[ -t 1 ]]; then
   echo "$(tput setaf 6)$(tput bold)Flash Used:$(tput sgr0) $FLASH / $FLASHTOTAL    ${FLASHPERCENT%??} %"
   echo "$(tput setaf 6)$(tput bold)RAM Used:  $(tput sgr0) $RAM / $RAMTOTAL     ${RAMPERCENT%??} %"
   else
     echo "Flash Used: $FLASH / $FLASHTOTAL    ${FLASHPERCENT%??} %"
     echo "RAM Used:   $RAM / $RAMTOTAL     ${RAMPERCENT%??} %"
+  fi
 }
 
 build_firmware()
