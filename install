@@ -14,7 +14,7 @@ Continuing installation...
 # WIP: Check to see if there is a po alias clash
 source "$HOME/.bashrc"
 
-if alias ls &>/dev/null ; then
+if alias po &>/dev/null ; then
   echo "$(tput setaf 1)$(tput bold)WARNING: You have an alias named 'po'. Use 'unalias po' to remove the alias.$(tput sgr0)"
   exit
 fi
