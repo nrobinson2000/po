@@ -191,10 +191,9 @@ validateDevicePlatform()
     if [ "$DEVICE_TYPE" == "duo" ];
     then
       cd "$FIRMWARE_DUO/firmware" || exit
-      switch_branch $BRANCH_DUO &> /dev/null
-    fi
+      switch_branch "$BRANCH_DUO" &> /dev/null
 
-    if [ "$DEVICE_TYPE" == "pi" ];
+    elif [ "$DEVICE_TYPE" == "pi" ];
     then
       cd "$FIRMWARE_PI/firmware" || exit
       switch_branch "feature/raspberry-pi"  &> /dev/null
