@@ -496,9 +496,7 @@ print_logo
   if [ "$DEVICE_TYPE" == "duo" ];
   then
     make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
-  else
-
-    if [ "$DEVICE_TYPE" == "pi" ];
+  elif [ "$DEVICE_TYPE" == "pi" ];
     then
         if hash docker 2>/dev/null;
         then
@@ -520,7 +518,6 @@ print_logo
       else
     make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
     fi
-  fi
 }
 
 ota() # device firmware
