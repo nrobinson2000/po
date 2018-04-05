@@ -11,6 +11,11 @@ echo "
 Continuing installation...
 "
 
+if [[ "$USER" != "${USER/ /}" ]]; then
+  echo "$(tput setaf 1)$(tput bold)WARNING: Your username contains space(s), something which is not compatible for po.$(tput sgr0)"
+  exit
+fi
+
 # WIP: Check to see if there is a po alias clash
 source "$HOME/.bashrc"
 

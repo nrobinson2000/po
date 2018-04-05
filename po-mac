@@ -96,7 +96,7 @@ _install()
       fi
 
       # Tracking
-      SYSTEM_IP="$(curl -sS ipecho.net/plain)"
+      SYSTEM_IP="$(curl -sS ipinfo.io/ip)"
       KERNEL="$(uname -s)"
       curl -sS "https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$KERNEL/$BASH_VERSION@$SYSTEM_IP" > /dev/null &
 
@@ -162,7 +162,7 @@ _list()
 
 _update()
 {
-  SYSTEM_IP="$(curl -sS ipecho.net/plain)"
+  SYSTEM_IP="$(curl -sS ipinfo.io/ip)"
   KERNEL="$(uname -s)"
   curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" > /dev/null &
 

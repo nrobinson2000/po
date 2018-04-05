@@ -234,7 +234,7 @@ cd .. || exit
 rm -f custom-baud.zip
 
 # Tracking
-SYSTEM_IP="$(curl -sS ipecho.net/plain)"
+SYSTEM_IP="$(curl -sS ipinfo.io/ip)"
 KERNEL="$(uname -s)"
 curl -sS "https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$KERNEL/$BASH_VERSION@$SYSTEM_IP" > /dev/null &
 
@@ -332,7 +332,7 @@ Found the following Particle Devices:
 
 _update()
 {
-    SYSTEM_IP="$(curl -sS ipecho.net/plain)"
+    SYSTEM_IP="$(curl -sS ipinfo.io/ip)"
     KERNEL="$(uname -s)"
     curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" > /dev/null &
 
