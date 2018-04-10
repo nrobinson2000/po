@@ -1,4 +1,4 @@
-# Contributing to po-util:
+# Contributing to po:
 
 First off, thank you for considering contributing to po. It's people like you that make po such a great tool.
 
