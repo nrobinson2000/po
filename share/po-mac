@@ -243,8 +243,8 @@ _update()
   brew update
   brew upgrade newpo
 
-  rm -f ~/.po-util/doc/po-util-README.md
-  curl -fsSLo ~/.po-util/doc/po-util-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
+  rm -f ~/.po-util/doc/po-README.md
+  curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
   echo
   exit
 }
