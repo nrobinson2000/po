@@ -1,19 +1,16 @@
 #!/bin/bash
-#                                            __      __  __
-#                                           /  |    /  |/  |
-#     ______    ______           __    __  _██ |_   ██/ ██ |
-#    /      \  /      \  ______ /  |  /  |/ ██   |  /  |██ |
-#   /██████  |/██████  |/      |██ |  ██ |██████/   ██ |██ |
-#   ██ |  ██ |██ |  ██ |██████/ ██ |  ██ |  ██ | __ ██ |██ |
-#   ██ |__██ |██ \__██ |        ██ \__██ |  ██ |/  |██ |██ |
-#   ██    ██/ ██    ██/         ██    ██/   ██  ██/ ██ |██ |
-#   ███████/   ██████/           ██████/     ████/  ██/ ██/
+#     ______    ______
+#    /      \  /      \
+#   /██████  |/██████  |  The Future of po-util:
+#   ██ |  ██ |██ |  ██ |
+#   ██ |__██ |██ \__██ |      Refactored,
+#   ██    ██/ ██    ██/       Modular,
+#   ███████/   ██████/        Cross-Compatible
 #   ██ |
 #   ██ |
-#   ██/                  https://po-util.com
-#
+#   ██/  https://po-util.com
 
-#  po-util - The Ultimate Local Particle Experience for Linux and macOS
+# po - The Ultimate Local Particle Experience for Linux and macOS
 # Copyright (C) 2017  Nathan Robinson
 
 getModems()
