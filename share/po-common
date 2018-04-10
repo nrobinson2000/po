@@ -250,6 +250,10 @@ validateDevicePlatform()
     DFU_ADDRESS1="2b04:d058"
     DFU_ADDRESS2="0x80C0000"
   fi
+
+  PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
+  PROJECTNAME="${PROJECTNAME##*/}"
+  TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
 }
 
 build_message()
@@ -495,10 +499,6 @@ fi
 build_firmware()
 {
     store_build_parameters
-
-PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
-PROJECTNAME="${PROJECTNAME##*/}"
-TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
 
 echo "$TARGET_FILE"
 
