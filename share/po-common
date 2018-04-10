@@ -933,7 +933,7 @@ installNodeVersion()
 
 _help()
 {
-  TITLELINE="Copyright (GPL) 2017 Nathan D. Robinson"
+  TITLELINE="Copyright (C) 2018 Nathan Robinson"
   USAGELINE="Usage: po DEVICE_TYPE COMMAND DEVICE_NAME"
   USAGELINE1="     po DFU_COMMAND"
   USAGELINE2="     po install [full_install_path]"
