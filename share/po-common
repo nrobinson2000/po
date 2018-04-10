@@ -100,30 +100,42 @@ find_objects() #Consolidated function
                 DIRECTORY="$1"
             ;;
         esac
-        if [ -f "$CWD/$DEVICESFILE/devices.txt" ] || [ -d "$CWD/$FIRMWAREDIR/firmware" ] || [ -f "$CWD/$FIRMWAREBIN/bin/firmware.bin" ];
+        if [ -d "$CWD/$DIRECTORY" ] && [ -d "$CWD/$DIRECTORY/firmware" ];
         then
-            DEVICESFILE="$CWD/$DEVICESFILE/devices.txt"
-            FIRMWAREDIR="$CWD/$FIRMWAREDIR/firmware"
-            FIRMWAREBIN="$CWD/$FIRMWAREBIN/bin/firmware.bin"
+            DEVICESFILE="$CWD/$DIRECTORY/devices.txt"
+            FIRMWAREDIR="$CWD/$DIRECTORY/firmware"
+            PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
+            PROJECTNAME="${PROJECTNAME##*/}"
+            TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+            FIRMWAREBIN="$CWD/$DIRECTORY/bin/$TARGET_FILE.bin"
         else
             if [ -d "$DIRECTORY" ] && [ -d "$DIRECTORY/firmware" ];
             then
                 DEVICESFILE="$DIRECTORY/devices.txt"
                 FIRMWAREDIR="$DIRECTORY/firmware"
-                FIRMWAREBIN="$DIRECTORY/bin/firmware.bin"
+                PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
+                PROJECTNAME="${PROJECTNAME##*/}"
+                TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+                FIRMWAREBIN="$DIRECTORY/bin/$TARGET_FILE.bin"
             else
                 if [ -d "$CWD/$DIRECTORY" ] && [ -d "$CWD/firmware" ];
                 then
                     DEVICESFILE="$CWD/$DIRECTORY/../devices.txt"
                     FIRMWAREDIR="$CWD/$DIRECTORY"
-                    FIRMWAREBIN="$CWD/$DIRECTORY/../bin/firmware.bin"
+                    PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
+                    PROJECTNAME="${PROJECTNAME##*/}"
+                    TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+                    FIRMWAREBIN="$CWD/$DIRECTORY/../bin/$TARGET_FILE.bin"
                 else
                     if [ "$DIRECTORY" == "." ] && [ -f "$CWD/main.cpp" ];
                     then
                         cd "$CWD/.." || exit
                         DEVICESFILE="$PWD/devices.txt"
                         FIRMWAREDIR="$CWD"
-                        FIRMWAREBIN="$PWD/bin/firmware.bin"
+                        PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
+                        PROJECTNAME="${PROJECTNAME##*/}"
+                        TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+                        FIRMWAREBIN="$PWD/bin/$TARGET_FILE.bin"
                     else
                         echo
                         red_echo "Firmware not found!"
@@ -138,7 +150,10 @@ or choose a valid directory."
     else
         DEVICESFILE="$CWD/devices.txt"
         FIRMWAREDIR="$CWD/firmware"
-        FIRMWAREBIN="$CWD/bin/firmware.bin"
+        PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
+        PROJECTNAME="${PROJECTNAME##*/}"
+        TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+        FIRMWAREBIN="$CWD/bin/$TARGET_FILE.bin"
     fi
 
     if [ -d "$FIRMWAREDIR" ];
@@ -189,10 +204,6 @@ of your devices on each line."
         fi
         FINDBINFAIL="true"
     fi
-
-    PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
-    PROJECTNAME="${PROJECTNAME##*/}"
-    TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
 }
 
 validateDevicePlatform()
@@ -259,9 +270,9 @@ validateDevicePlatform()
 build_message()
 {
     echo
-    cd "$FIRMWAREDIR"/.. || exit
-    BINARYDIR="$PWD/bin"
-    green_echo "Binary saved to $BINARYDIR/$TARGET_FILE.bin"
+    # cd "$FIRMWAREDIR"/.. || exit
+    # BINARYDIR="$PWD/bin"
+    green_echo "Binary saved to $PROJECTNAME/$TARGET_FILE.bin"
     echo
     exit
 }
@@ -500,8 +511,6 @@ build_firmware()
 {
     store_build_parameters
 
-echo "$TARGET_FILE"
-
 TITLELINE="Building firmware..."
 USAGELINE="Build Parameters:"
 USAGELINE1="$DEVICE_TYPE"
@@ -511,7 +520,8 @@ print_logo
 
   if [ "$DEVICE_TYPE" == "duo" ];
   then
-    make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_FILE="$TARGET_FILE" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
+    make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_FILE="$TARGET_FILE" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE" || exit
+    cp "$FIRMWAREBIN" "$FIRMWAREDIR/../$TARGET_FILE.bin"
   elif [ "$DEVICE_TYPE" == "pi" ];
     then
         if hash docker 2>/dev/null;
@@ -532,7 +542,8 @@ print_logo
           exit 1
         fi
       else
-    make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" TARGET_FILE="$TARGET_FILE" PLATFORM="$DEVICE_TYPE"
+    make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" TARGET_FILE="$TARGET_FILE" PLATFORM="$DEVICE_TYPE" || exit
+    cp "$FIRMWAREBIN" "$FIRMWAREDIR/../$TARGET_FILE.bin"
     fi
 }
 
@@ -904,7 +915,8 @@ chmod +x "$FIRMWAREDIR/../ci/travis.sh"
 
       fi
 
-  echo "bin/*" > "$FIRMWAREDIR/../.gitignore"
+  echo "bin/*
+*.bin" > "$FIRMWAREDIR/../.gitignore"
   cd "$FIRMWAREDIR/.." || exit
   git init &> /dev/null
 
@@ -1776,7 +1788,7 @@ fi
 dfu_open
 echo
 ( build_firmware && echo && green_echo "Building firmware was successful! Flashing with dfu-util..." && echo ) || ( echo && red_echo 'Building firmware failed! Closing DFU...' && echo && dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D /dev/null &> /dev/null && exit )
-dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREDIR/../bin/firmware.bin" || exit #&> /dev/null
+dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN" || exit #&> /dev/null
 echo
 blue_echo "Firmware successfully flashed to $DEVICE_TYPE on $MODEM"
 echo
