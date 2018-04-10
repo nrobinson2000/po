@@ -257,7 +257,7 @@ build_message()
     echo
     cd "$FIRMWAREDIR"/.. || exit
     BINARYDIR="$PWD/bin"
-    green_echo "Binary saved to $BINARYDIR/firmware.bin"
+    green_echo "Binary saved to $BINARYDIR/$TARGET_FILE.bin"
     echo
     exit
 }
@@ -496,6 +496,12 @@ build_firmware()
 {
     store_build_parameters
 
+PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
+PROJECTNAME="${PROJECTNAME##*/}"
+TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+
+echo "$TARGET_FILE"
+
 TITLELINE="Building firmware..."
 USAGELINE="Build Parameters:"
 USAGELINE1="$DEVICE_TYPE"
@@ -505,7 +511,7 @@ print_logo
 
   if [ "$DEVICE_TYPE" == "duo" ];
   then
-    make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
+    make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_FILE="$TARGET_FILE" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
   elif [ "$DEVICE_TYPE" == "pi" ];
     then
         if hash docker 2>/dev/null;
@@ -526,7 +532,7 @@ print_logo
           exit 1
         fi
       else
-    make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
+    make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" TARGET_FILE="$TARGET_FILE" PLATFORM="$DEVICE_TYPE"
     fi
 }
 
@@ -1746,7 +1752,7 @@ _build()
     build_firmware || exit
 
     if [[ "$DEVICE_TYPE" != "pi" ]]; then
-      SIZES=$(arm-none-eabi-size "$FIRMWAREDIR/../bin/firmware.elf" | tail -1)
+      SIZES=$(arm-none-eabi-size "$FIRMWAREDIR/../bin/$TARGET_FILE.elf" | tail -1)
       printSizes $SIZES
     fi
 
