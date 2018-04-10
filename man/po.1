@@ -28,7 +28,7 @@ supports the Photon, Electron, Core, P1, Raspberry Pi, and Redbear Duo.
 Download the tools needed for development. Requires sudo. You can also re-install with this command. You can optionally install to an alternate location by specifying [full_install_path].
 
 Example:
-.B  po
+.B po
 install ~/particle
 
 By default, the Particle firmware is installed in ~/github.
@@ -45,7 +45,7 @@ NOTE: You can supply another argument to "build" and "flash" to specify which fi
 
 Example:
 
-.B  po
+.B po
 photon flash photon-firmware/
 
 .TP
@@ -54,16 +54,35 @@ Refresh all code (Run after switching device or directory).
 
 .TP
 .B init
-Initialize your current working directory as a po-util project.  You must specify which platform your project is for. You can supply another argument to specify to create a project folder. (Without this argument the current working directory is initialized as a project.) The purpose of the platform argument is to generate a ".atom-build.yml" file which provides keyboard shortcuts for using po-util within Atom. More information on the shortcuts is below.
+Initialize your current working directory as a po-util project. You must specify which platform your project is for. You can supply another argument to specify to create a project folder. (Without this argument the current working directory is initialized as a project.) The purpose of the platform argument is to generate a ".atom-build.yml" file which provides keyboard shortcuts for using po-util within Atom. More information on the shortcuts is below.
 
 Example:
 
-.B  po
-init photon somePhotonProject
+.B po
+photon init somePhotonProject
+
+.TP
+.B create
+Initialize a project in ~/.po-util/projects, the default project folder.
+
+Example:
+
+.B po
+create photon somePhotonProject
+
+.TP
+.B open
+Open a project in the default project folder in a sub-shell for quick access. You can exit the sub-shell to return to your previous session.
+
+Example:
+
+.B po
+open somePhotonProject
+
 
 .TP
 .B update
-Download the latest releases of Redbear Duo firmware, Particle firmware, particle-cli and po-util.  You may supply another argument to choose to only update only one firmware repository, using "firmware" for Particle, and "duo" for the Redbear Duo.
+Download the latest releases of Redbear Duo firmware, Particle firmware, particle-cli and po-util. You may supply another argument to choose to only update only one firmware repository, using "firmware" for Particle, and "duo" for the Redbear Duo.
 
 .TP
 .B upgrade
@@ -78,7 +97,7 @@ NOTE: You can sequentially flash code to multiple devices by passing the -m or -
 
 Example:
 
-.B  po
+.B po
 photon ota -m product-firmware/
 
 NOTE: This is different from the product firmware update feature in the Particle Console because it updates the firmware of devices one at a time and only if the devices are online when the command is run.
@@ -99,7 +118,6 @@ Example:
 
 .B po
 serial open -d /dev/cu.usbmodem1441
-
 
 .TP
 .B serial monitor
@@ -125,9 +143,8 @@ Flash pre-compiled code to your device.
 
 Example:
 
-.B  po photon
+.B po photon
 dfu
-
 
 .TP
 .B dfu open
@@ -141,7 +158,6 @@ Example:
 .B po
 dfu open -d /dev/cu.usbmodem1441
 
-
 .TP
 .B dfu close
 Get device out of DFU mode.
@@ -154,9 +170,9 @@ Library manager command for po-util.
 
 .TP
 .B po lib
-The library manager makes it easy to use Particle libraries hosted on GitHub with your projects.  It does this by keeping the library repositories in
+The library manager makes it easy to use Particle libraries hosted on GitHub with your projects. It does this by keeping the library repositories in
 .B ~/.po-util/lib
-and creating symbolic links to the relevant library files in your projects.  It keeps track of which libraries are used in a project in a
+and creating symbolic links to the relevant library files in your projects. It keeps track of which libraries are used in a project in a
 .B libs.txt
 file in every project. More features which are listed below.
 
@@ -168,7 +184,7 @@ Download a Particle Library with Git and optionally name it. If run with no argu
 
 Example of downloading a library from GitHub:
 
-.B  po lib
+.B po lib
 get https://github.com/someUser/libraryName libraryName
 
 .TP
@@ -177,7 +193,7 @@ Add a downloaded library to a po-util project. Libraries are added in the firmwa
 
 Example adding an installed library to a project:
 
-.B  po lib
+.B po lib
 add libraryName
 
 .TP
@@ -186,7 +202,7 @@ Remove a library from a po-util project. Just the soft links are deleted.
 
 Example:
 
-.B  po lib
+.B po lib
 rm libraryName
 
 .TP
@@ -195,10 +211,10 @@ Create other libraries from other C++ files in a library. Useful for when multip
 
 Example:
 
-.B  cd
+.B cd
 ~/.po-util/lib/someLibWithOtherLibsInside
 
-.B  po lib
+.B po lib
 create
 
 .TP
@@ -207,7 +223,7 @@ Uninstall (delete) a library from ~/.po-util/lib
 
 Example:
 
-.B  po lib
+.B po lib
 purge someLibrary
 
 .TP
@@ -231,11 +247,11 @@ Libraries listed in "libs.txt" are installed and symlinks are created.
 
 .TP
 .B clean
-All symlinks in the project are removed, but "libs.txt" is untouched.  This is ideal for releasing you project, as there will be no linked libraries in the "firmware" directory, but rather a list that people can run "po lib setup" to download your project's dependencies.
+All symlinks in the project are removed, but "libs.txt" is untouched. This is ideal for releasing you project, as there will be no linked libraries in the "firmware" directory, but rather a list that people can run "po lib setup" to download your project's dependencies.
 
 .TP
 .B pack, package, export
-Copy your source code and linked libraries in "firmware" into a packaged directory inside of your project.  A tarball of the packaged directory is also created.  A useful method for sharing your project with users who do not have po-util.
+Copy your source code and linked libraries in "firmware" into a packaged directory inside of your project. A tarball of the packaged directory is also created. A useful method for sharing your project with users who do not have po-util.
 
 NOTE:
 If you are building for Raspberry Pi, Docker will not follow the symlinked files, and you will have to build the packaged directory instead.
@@ -254,13 +270,13 @@ View any dependencies included libraries may have.
 
 .TP
 .B ex, examples
-Library example manager.  Can be used to list available examples for a library and load them into a project.
+Library example manager. Can be used to list available examples for a library and load them into a project.
 
 .SH LIBRARY EXAMPLE MANAGER
 
 .TP
 .B po lib ex
-A work in progress.  The Library Example Manger allows you to find examples in a library and load them into your project for testing or modification.  Your original source code is backed up in the "main.cpp.YYYY-MM-DD-HH-mm.txt" format.  A "libs.txt" will be generated from the example upon loading.
+A work in progress. The Library Example Manger allows you to find examples in a library and load them into your project for testing or modification. Your original source code is backed up in the "main.cpp.YYYY-MM-DD-HH-mm.txt" format. A "libs.txt" will be generated from the example upon loading.
 
 .TP
 .B ls, list
@@ -268,7 +284,7 @@ List all examples in a Library.
 
 Example:
 
-.B  po lib ex
+.B po lib ex
 ls libraryName
 
 .TP
@@ -282,7 +298,7 @@ load libraryName exampleName
 
 .SH KEYBOARD SHORTCUTS
 
-The following shortcuts allow you to run common po-util commands quickly while using Atom. This requires the "build" package for Atom.  Get the package and a few other handy packages with:
+The following shortcuts allow you to run common po-util commands quickly while using Atom. This requires the "build" package for Atom. Get the package and a few other handy packages with:
 .B po setup-atom
 
 .TP
