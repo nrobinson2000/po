@@ -19,13 +19,13 @@ class Newpo < Formula
   desc "Particle Offline Utility: The Ultimate Local Particle Experience"
   homepage 'https://po-util.com'
   head 'https://github.com/nrobinson2000/homebrew-NewPo', :using => :git
-  url 'https://github.com/nrobinson2000/po/archive/0.1.6.tar.gz'
+  url 'https://github.com/nrobinson2000/po/archive/0.1.7.tar.gz'
   sha256 '72acef283d5f8c99477ccd6a215ebdcd7ab17819fcc6023cb341e0457f2979ec'
 
   def install
-    bin.install 'po'
-    share.install 'po-common'
-    share.install 'po-mac'
+    bin.install 'bin/po'
+    share.install 'share/po-common'
+    share.install 'share/po-mac'
     man1.install 'man/po.1'
     bash_completion.install "completion/po"
   end

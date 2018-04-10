@@ -41,9 +41,9 @@ Please install \"curl\" with your package manager.
     exit
   fi
 
-  sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/po-common
-  sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/po-linux
-  sudo curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/po
+  sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-common
+  sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-linux
+  sudo curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
   sudo chmod +x /usr/local/bin/po
 
   blue_echo "Installing bash completion for po..."
@@ -402,14 +402,14 @@ _update()
     blue_echo "Updating po-util.."
 
     sudo rm /usr/local/share/po-common
-    sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/po-common
+    sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-common
 
     sudo rm /usr/local/share/po-linux
-    sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/po-linux
+    sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-linux
 
-    # rm ~/po
-    # curl -fsSLo ~/po https://raw.githubusercontent.com/nrobinson2000/po/master/po
-    # chmod +x ~/po
+    sudo rm /usr/local/bin/po
+    sudo curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
+    sudo chmod +x /usr/local/bin/po
 
     rm -f ~/.po-util/doc/po-util-README.md
     curl -fsSLo ~/.po-util/doc/po-util-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util-README.md
