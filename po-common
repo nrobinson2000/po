@@ -879,7 +879,7 @@ cache:
   - $HOME/.po-util' > "$FIRMWAREDIR/../.travis.yml"
 
   echo "#!/bin/bash
-bash <(curl -sL https://master.po-util.com/ci-install)
+bash <(curl -sL https://raw.githubusercontent.com/nrobinson2000/po/master/ci/ci-install)
 po lib clean . -f &> /dev/null
 yes \"no\" | po lib setup # change to \"yes\" to prefer libraries from GitHub
 po $DEVICE_TYPE build" > "$FIRMWAREDIR/../ci/travis.sh"
