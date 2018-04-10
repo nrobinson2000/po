@@ -9,9 +9,9 @@ sudo curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nro
 sudo curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
 sudo chmod +x /usr/local/bin/po
 
-curl -sLO https://raw.githubusercontent.com/nrobinson2000/po/master/ci/config-expect.sh
-chmod +x config-expect.sh
+curl -sLO https://raw.githubusercontent.com/nrobinson2000/po/master/ci/config-expect
+chmod +x config-expect
 
-./config-expect.sh
+./config-expect
 
 po install ~/.po-util basic

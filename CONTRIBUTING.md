@@ -17,7 +17,7 @@ Whenever possible, please follow these guidelines for contributions:
 │   └── po # Entry point of po, modules are loaded and arguments are parsed
 ├── ci/
 │   ├── ci-install       # Used to install po in travis-ci when testing project
-│   ├── config-expect.sh # Automates the po configuration prior to installation
+│   ├── config-expect    # Automates the po configuration prior to installation
 │   ├── linux            # Script to install po for travis-ci testing on Linux
 │   └── mac              # Script to install po for travis-ci testing on macOS
 ├── completion/

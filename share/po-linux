@@ -62,8 +62,8 @@ Please install \"curl\" with your package manager.
   # create doc dir
   [ -d "$HOME/.po-util/doc" ] || mkdir -p "$HOME/.po-util/doc"  # If BASE_DIR does not exist, create it
 
-  # Download po-util-README.md
-  curl -fsSLo ~/.po-util/doc/po-util-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util-README.md
+  # Download po-README.md
+  curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
 
   # Check to see if we need to override the install directory.
   if [ "$1" ] && [ "$1" != $BASE_DIR ]
@@ -421,8 +421,8 @@ _update()
     sudo curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
     sudo chmod +x /usr/local/bin/po
 
-    rm -f ~/.po-util/doc/po-util-README.md
-    curl -fsSLo ~/.po-util/doc/po-util-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util-README.md
+    rm -f ~/.po-util/doc/po-README.md
+    curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-README.md
 
     curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/homebrew-po/master/man/po.1
     sudo mv po.1 /usr/local/share/man/man1/
