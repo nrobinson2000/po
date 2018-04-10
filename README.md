@@ -7,10 +7,7 @@
 [![](https://img.shields.io/github/issues/nrobinson2000/po.svg)](https://github.com/nrobinson2000/po/issues)
 [![](https://img.shields.io/github/stars/nrobinson2000/po.svg)](https://github.com/nrobinson2000/po/stargazers)
 
-
 # po - The Future of [po-util](https://github.com/nrobinson2000/po-util): Refactored, Modular, and Cross-Compatible
-
-
 
 ## Why?
 
