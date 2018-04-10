@@ -8,7 +8,7 @@ Whenever possible, please follow these guidelines for contributions:
 - Familiarize yourself with the code base, and follow the formatting principles adhered to in the surrounding code.
 - Wherever possible, test your contributions.
 - If the changes have an impact on developers, then those changes should be described in the documentation.
-- If you are adding a new feature please make an effort to add it to both the Linux and macOS versions of po-util.
+- If you are adding a new feature please make an effort to make it cross-compatible.
 
 # Introduction to the po code base:
 
