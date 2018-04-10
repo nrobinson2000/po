@@ -236,7 +236,7 @@ cd ..
 # Install custom-baud
 blue_echo "Installing custom-baud..."
 cd "$BINDIR" || exit
-curl -fsSLO https://github.com/nrobinson2000/po-util/releases/download/v1.5/custom-baud.zip
+curl -fsSLO https://github.com/nrobinson2000/po/raw/master/depend/custom-baud.zip
 unzip -o custom-baud.zip
 cd custom-baud || exit
 make clean all
@@ -261,7 +261,7 @@ sudo npm install -g --unsafe-perm node-pre-gyp npm particle-cli
 
 # Install udev rules file
 blue_echo "Installing udev rule (requires sudo) ..."
-curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/po-util/master/60-po-util.rules
+curl -fsSLO https://github.com/nrobinson2000/po/raw/master/depend/60-po-util.rules
 sudo mv 60-po-util.rules /etc/udev/rules.d/60-po-util.rules
 
 # Install manpage
