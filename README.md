@@ -1,4 +1,4 @@
-![](po-logo.svg)
+<img src="po-logo.png">
 
 [![Build Status](https://travis-ci.org/nrobinson2000/po.svg?branch=master)](https://travis-ci.org/nrobinson2000/po)
 [![Join the chat at https://gitter.im/po-util/Lobby](https://badges.gitter.im/po-util/Lobby.svg)](https://gitter.im/po-util/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
