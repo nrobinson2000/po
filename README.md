@@ -1,7 +1,16 @@
+![](po-logo.svg)
+
 [![Build Status](https://travis-ci.org/nrobinson2000/po.svg?branch=master)](https://travis-ci.org/nrobinson2000/po)
-# po
-## The Future of [po-util](https://github.com/nrobinson2000/po-util): Refactored, Modular, and Cross-Compatible
-**Po is in beta, but fully functional.**
+[![Join the chat at https://gitter.im/po-util/Lobby](https://badges.gitter.im/po-util/Lobby.svg)](https://gitter.im/po-util/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![](https://img.shields.io/badge/donate-PayPal-009cde.svg)](https://www.paypal.me/nrobinson2000)
+[![](https://img.shields.io/badge/donate-bitcoin-orange.svg)](https://donate.nrobinson.me)
+[![](https://img.shields.io/github/issues/nrobinson2000/po.svg)](https://github.com/nrobinson2000/po/issues)
+[![](https://img.shields.io/github/stars/nrobinson2000/po.svg)](https://github.com/nrobinson2000/po/stargazers)
+
+
+# po - The Future of [po-util](https://github.com/nrobinson2000/po-util): Refactored, Modular, and Cross-Compatible
+
+
 
 ## Why?
 
@@ -12,10 +21,10 @@ Maintaining the two repositories was tedious, as I had to do double the work eve
 My solution was to reunite the Mac and Linux versions back into a single repository, breaking the script into several modular files.
 
 ```
-├── po
-├── po-common
-├── po-linux
-├── po-mac
+┌── bin/po
+├── share/po-common
+├── share/po-linux
+└── share/po-mac
 ```
 
 * `po` is the main file, and the script that gets executed when a user runs `po` at the command line.
