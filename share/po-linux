@@ -103,7 +103,7 @@ Please install \"curl\" with your package manager.
     NOGIT="false"
     echo
     blue_echo "Installing Particle firmware from Github..."
-    git clone https://github.com/spark/firmware.git
+    git clone https://github.com/spark/firmware.git || git stash && git pull
   else
     NOGIT="true"
   fi
@@ -116,7 +116,7 @@ Please install \"curl\" with your package manager.
     NOGIT="false"
     echo
     blue_echo "Installing RedBear Duo firmware from Github..."
-    git clone https://github.com/redbear/firmware.git
+    git clone https://github.com/redbear/firmware.git || git stash && git pull
   else
     NOGIT="true"
   fi
@@ -129,7 +129,7 @@ Please install \"curl\" with your package manager.
     NOGIT="false"
     echo
     blue_echo "Installing Particle-Pi firmware from Github..."
-    git clone https://github.com/spark/firmware.git
+    git clone https://github.com/spark/firmware.git || git stash && git pull
   else
     NOGIT="true"
   fi
