@@ -423,7 +423,7 @@ _update()
     sudo chmod +x /usr/local/bin/po
 
     rm -f ~/.po-util/doc/po-README.md
-    curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-README.md
+    curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
 
     curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/po/master/man/po.1
     sudo mv po.1 /usr/local/share/man/man1/
