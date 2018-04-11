@@ -86,17 +86,11 @@ find_objects() #Consolidated function
     then
         case "$1" in
             */)
-                #"has slash"
-                DEVICESFILE="${1%?}"
-                FIRMWAREDIR="${1%?}"
-                FIRMWAREBIN="${1%?}"
+                #has slash
                 DIRECTORY="${1%?}"
             ;;
             *)
-                echo "doesn't have a slash" > /dev/null
-                DEVICESFILE="$1"
-                FIRMWAREDIR="$1"
-                FIRMWAREBIN="$1"
+                #no slash
                 DIRECTORY="$1"
             ;;
         esac
@@ -104,8 +98,8 @@ find_objects() #Consolidated function
         then
             DEVICESFILE="$CWD/$DIRECTORY/devices.txt"
             FIRMWAREDIR="$CWD/$DIRECTORY/firmware"
-            PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
-            PROJECTNAME="${PROJECTNAME##*/}"
+            PROJECTDIR="$CWD/$DIRECTORY"
+            PROJECTNAME="${PROJECTDIR##*/}"
             TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
             FIRMWAREBIN="$CWD/$DIRECTORY/bin/$TARGET_FILE.bin"
         else
@@ -113,8 +107,8 @@ find_objects() #Consolidated function
             then
                 DEVICESFILE="$DIRECTORY/devices.txt"
                 FIRMWAREDIR="$DIRECTORY/firmware"
-                PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
-                PROJECTNAME="${PROJECTNAME##*/}"
+                PROJECTDIR="$DIRECTORY"
+                PROJECTNAME="${PROJECTDIR##*/}"
                 TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
                 FIRMWAREBIN="$DIRECTORY/bin/$TARGET_FILE.bin"
             else
@@ -122,8 +116,8 @@ find_objects() #Consolidated function
                 then
                     DEVICESFILE="$CWD/$DIRECTORY/../devices.txt"
                     FIRMWAREDIR="$CWD/$DIRECTORY"
-                    PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
-                    PROJECTNAME="${PROJECTNAME##*/}"
+                    PROJECTDIR="$(cd $FIRMWAREDIR/.. && pwd)"
+                    PROJECTNAME="${PROJECTDIR##*/}"
                     TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
                     FIRMWAREBIN="$CWD/$DIRECTORY/../bin/$TARGET_FILE.bin"
                 else
@@ -132,8 +126,8 @@ find_objects() #Consolidated function
                         cd "$CWD/.." || exit
                         DEVICESFILE="$PWD/devices.txt"
                         FIRMWAREDIR="$CWD"
-                        PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
-                        PROJECTNAME="${PROJECTNAME##*/}"
+                        PROJECTDIR="$PWD"
+                        PROJECTNAME="${PROJECTDIR##*/}"
                         TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
                         FIRMWAREBIN="$PWD/bin/$TARGET_FILE.bin"
                     else
@@ -150,8 +144,8 @@ or choose a valid directory."
     else
         DEVICESFILE="$CWD/devices.txt"
         FIRMWAREDIR="$CWD/firmware"
-        PROJECTNAME="$(cd $FIRMWAREDIR/.. && pwd)"
-        PROJECTNAME="${PROJECTNAME##*/}"
+        PROJECTDIR="$CWD"
+        PROJECTNAME="${PROJECTDIR##*/}"
         TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
         FIRMWAREBIN="$CWD/bin/$TARGET_FILE.bin"
     fi
@@ -449,9 +443,9 @@ cleanFirmware()
       make clean -s PLATFORM="$DEVICE_TYPE"  2>&1 /dev/null
     fi
 
-    if [ "$FIRMWAREDIR/../bin" != "$HOME/bin" ];
+    if [ "$PROJECTDIR/bin" != "$HOME/bin" ];
     then
-      rm -rf "$FIRMWAREDIR/../bin"
+      rm -rf "$PROJECTDIR/bin"
     fi
     blue_echo "Sucessfully cleaned."
     echo
@@ -514,19 +508,19 @@ build_firmware()
 TITLELINE="Building firmware..."
 USAGELINE="Build Parameters:"
 USAGELINE1="$DEVICE_TYPE"
-USAGELINE2="$(cd $FIRMWAREDIR/.. && basename $PWD)"
+USAGELINE2="$(basename $PROJECTDIR)"
 TEXTLINE="po $DEVICE_TYPE build $USAGELINE2"
 print_logo
 
   if [ "$DEVICE_TYPE" == "duo" ];
   then
-    make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_FILE="$TARGET_FILE" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE" || exit
-    cp "$FIRMWAREBIN" "$FIRMWAREDIR/../$TARGET_FILE.bin"
+    make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_FILE="$TARGET_FILE" TARGET_DIR="$PROJECTDIR/bin" PLATFORM="$DEVICE_TYPE" || exit
+    cp "$FIRMWAREBIN" "$PROJECTDIR/$TARGET_FILE.bin"
   elif [ "$DEVICE_TYPE" == "pi" ];
     then
         if hash docker 2>/dev/null;
         then
-          if docker run --rm -i -v $FIRMWARE_PI/firmware:/firmware -v $FIRMWAREDIR:/input -v $FIRMWAREDIR/../bin:/output particle/buildpack-raspberrypi 2> echo;
+          if docker run --rm -i -v $FIRMWARE_PI/firmware:/firmware -v $FIRMWAREDIR:/input -v $PROJECTDIR/bin:/output particle/buildpack-raspberrypi 2> echo;
           then
             echo
             blue_echo "Successfully built firmware for Raspberry Pi"
@@ -542,8 +536,8 @@ print_logo
           exit 1
         fi
       else
-    make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" TARGET_FILE="$TARGET_FILE" PLATFORM="$DEVICE_TYPE" || exit
-    cp "$FIRMWAREBIN" "$FIRMWAREDIR/../$TARGET_FILE.bin"
+    make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$PROJECTDIR/bin" TARGET_FILE="$TARGET_FILE" PLATFORM="$DEVICE_TYPE" || exit
+    cp "$FIRMWAREBIN" "$PROJECTDIR/$TARGET_FILE.bin"
     fi
 }
 
@@ -845,7 +839,7 @@ void loop() // Put code here to loop forever
 
 }" > "$FIRMWAREDIR/main.cpp"
 
-  cp "$HOME/.po-util/doc/po-README.md" "$FIRMWAREDIR/../README.md"
+  cp "$HOME/.po-util/doc/po-README.md" "$PROJECTDIR/README.md"
 fi
 
       if [ "$DEVICE_TYPE" != "" ];
@@ -890,9 +884,9 @@ targets:
     cmd: po
     keymap: ctrl-alt-5
     name: OTA
-          " > "$FIRMWAREDIR/../.atom-build.yml"
+          " > "$PROJECTDIR/.atom-build.yml"
 
-  mkdir -p "$FIRMWAREDIR/../ci"
+  mkdir -p "$PROJECTDIR/ci"
 
   echo 'dist: trusty
 sudo: required
@@ -903,21 +897,21 @@ script:
 
 cache:
   directories:
-  - $HOME/.po-util' > "$FIRMWAREDIR/../.travis.yml"
+  - $HOME/.po-util' > "$PROJECTDIR/.travis.yml"
 
   echo "#!/bin/bash
 bash <(curl -sL https://raw.githubusercontent.com/nrobinson2000/po/master/ci/ci-install)
 po lib clean . -f &> /dev/null
 yes \"no\" | po lib setup # change to \"yes\" to prefer libraries from GitHub
-po $DEVICE_TYPE build" > "$FIRMWAREDIR/../ci/travis.sh"
+po $DEVICE_TYPE build" > "$PROJECTDIR/ci/travis.sh"
 
-chmod +x "$FIRMWAREDIR/../ci/travis.sh"
+chmod +x "$PROJECTDIR/ci/travis.sh"
 
       fi
 
   echo "bin/*
-*.bin" > "$FIRMWAREDIR/../.gitignore"
-  cd "$FIRMWAREDIR/.." || exit
+*.bin" > "$PROJECTDIR/.gitignore"
+  cd "$PROJECTDIR" || exit
   git init &> /dev/null
 
       echo
@@ -1114,7 +1108,7 @@ _lib-setup()
             getLib "$i" "$LIB_NAME"
             addLib "$LIB_NAME" "$i"
             addHeaders "$LIB_NAME" "$i"
-        done < "$FIRMWAREDIR/../libs.txt"
+        done < "$PROJECTDIR/libs.txt"
         echo
         exit
 }
@@ -1132,7 +1126,7 @@ _lib-get()
             do
                 LIB_NAME="$(echo $i | awk '{ print $NF }' )"
                 getLib "$i" "$LIB_NAME"
-            done < "$FIRMWAREDIR/../libs.txt"
+            done < "$PROJECTDIR/libs.txt"
             echo
           else
             QUERY_ARGS="$(echo $1 $2 | xargs)"
@@ -1205,7 +1199,7 @@ _lib-add()
         LIB_NAME="$(echo $i | awk '{ print $NF }' )"
         addLib
         addHeaders "$LIB_NAME"
-      done < "$FIRMWAREDIR/../libs.txt"
+      done < "$PROJECTDIR/libs.txt"
       echo
       exit
     fi
@@ -1221,7 +1215,7 @@ _lib-add()
       addLib
       #Add entries to libs.txt file
       LIB_URL="$( cd $LIBRARY/$1 && git config --get remote.origin.url )"
-      echo "$LIB_URL $1" >> "$FIRMWAREDIR/../libs.txt"
+      echo "$LIB_URL $1" >> "$PROJECTDIR/libs.txt"
       addHeaders "$LIB_NAME"
     echo
     green_echo "Imported library $1"
@@ -1258,15 +1252,15 @@ _lib-rm()
       rm "$FIRMWAREDIR/$1.h" &> /dev/null   # to new
       rm -rf "${FIRMWAREDIR:?}/$1" &> /dev/null # system
 
-      grep -v "$1" "$FIRMWAREDIR/../libs.txt" > "$FIRMWAREDIR/../libs-temp.txt"
-      rm "$FIRMWAREDIR/../libs.txt"
-      mv "$FIRMWAREDIR/../libs-temp.txt" "$FIRMWAREDIR/../libs.txt"
+      grep -v "$1" "$PROJECTDIR/libs.txt" > "$PROJECTDIR/libs-temp.txt"
+      rm "$PROJECTDIR/libs.txt"
+      mv "$PROJECTDIR/libs-temp.txt" "$PROJECTDIR/libs.txt"
 
-      if [ -s "$FIRMWAREDIR/../libs.txt" ];
+      if [ -s "$PROJECTDIR/libs.txt" ];
       then
          echo " " > /dev/null
       else
-        rm "$FIRMWAREDIR/../libs.txt"
+        rm "$PROJECTDIR/libs.txt"
       fi
       echo
       rmHeaders "$1"
@@ -1310,18 +1304,16 @@ _lib-pack()
 {
   DIRWARNING="true"
     find_objects "$1"
-    PROJECTDIR="$(cd $FIRMWAREDIR/.. && pwd)"
-    PROJECTDIR="${PROJECTDIR##*/}"
-    if [ -d "$FIRMWAREDIR/../$PROJECTDIR-packaged" ];
+    if [ -d "$PROJECTDIR/$PROJECTNAME-packaged" ];
     then
-      rm -rf "$FIRMWAREDIR/../$PROJECTDIR-packaged"
-      rm -rf "$FIRMWAREDIR/../$PROJECTDIR-packaged.zip"
+      rm -rf "$PROJECTDIR/$PROJECTNAME-packaged"
+      rm -rf "$PROJECTDIR/$PROJECTNAME-packaged.zip"
     fi
 
-    cp -r "$FIRMWAREDIR" "$FIRMWAREDIR/../$PROJECTDIR-packaged"
-    zip -r "$FIRMWAREDIR/../$PROJECTDIR-packaged.zip" "$FIRMWAREDIR/../$PROJECTDIR-packaged" &> /dev/null
+    cp -r "$FIRMWAREDIR" "$PROJECTDIR/$PROJECTNAME-packaged"
+    zip -r "$PROJECTDIR/$PROJECTNAME-packaged.zip" "$PROJECTDIR/$PROJECTNAME-packaged" &> /dev/null
     echo
-    blue_echo "Firmware has been packaged as \"$PROJECTDIR-packaged\" and \"$PROJECTDIR-packaged.zip\"
+    blue_echo "Firmware has been packaged as \"$PROJECTNAME-packaged\" and \"$PROJECTNAME-packaged.zip\"
 in \"$PROJECTDIR\". Feel free to use either when sharing your firmware."
     echo
   exit
@@ -1502,7 +1494,7 @@ _lib-ex-load()
   cp "$LIBRARY/$1/examples/$2/$2.ino" "$FIRMWAREDIR/main.cpp"
   fi
 
-  if [ -f "$FIRMWAREDIR/../libs.txt" ];
+  if [ -f "$PROJECTDIR/libs.txt" ];
   then
 
   while read i ## Install and add required libs from libs.txt
@@ -1511,13 +1503,13 @@ _lib-ex-load()
     addLib
     rmHeaders "$LIB_NAME"
     addHeaders "$LIB_NAME"
-  done < "$FIRMWAREDIR/../libs.txt"
+  done < "$PROJECTDIR/libs.txt"
 
   else # get dependencies
 
-  grep "#include" "$FIRMWAREDIR/main.cpp" | grep -v "Particle" | grep -v "application" > "$FIRMWAREDIR/../libs.temp.txt"
+  grep "#include" "$FIRMWAREDIR/main.cpp" | grep -v "Particle" | grep -v "application" > "$PROJECTDIR/libs.temp.txt"
 
-  sed 's/^[^"]*"//; s/".*//' "$FIRMWAREDIR/../libs.temp.txt" > "$FIRMWAREDIR/../libs.temp1.txt"
+  sed 's/^[^"]*"//; s/".*//' "$PROJECTDIR/libs.temp.txt" > "$PROJECTDIR/libs.temp1.txt"
 
   while read i ## remove the < >
   do
@@ -1529,18 +1521,18 @@ _lib-ex-load()
     rm "$FIRMWAREDIR/main.cpp"
     mv "$FIRMWAREDIR/main.cpp.temp" "$FIRMWAREDIR/main.cpp"
 
-  echo "$j" >> "$FIRMWAREDIR/../libs.temp2.txt"
-  done < "$FIRMWAREDIR/../libs.temp1.txt"
+  echo "$j" >> "$PROJECTDIR/libs.temp2.txt"
+  done < "$PROJECTDIR/libs.temp1.txt"
 
-  rm "$FIRMWAREDIR/../libs.temp.txt"
+  rm "$PROJECTDIR/libs.temp.txt"
 
   while read i ## remove .h
   do
-  echo "${i%.h}" >> "$FIRMWAREDIR/../libs.temp.txt"
-  done < "$FIRMWAREDIR/../libs.temp2.txt"
+  echo "${i%.h}" >> "$PROJECTDIR/libs.temp.txt"
+  done < "$PROJECTDIR/libs.temp2.txt"
 
-  rm "$FIRMWAREDIR/../libs.temp1.txt"
-  rm "$FIRMWAREDIR/../libs.temp2.txt"
+  rm "$PROJECTDIR/libs.temp1.txt"
+  rm "$PROJECTDIR/libs.temp2.txt"
 
   while read i ## create libs.txt
   do
@@ -1552,21 +1544,21 @@ _lib-ex-load()
       then
         LIB_URL="$( cd $LIBRARY/$LIB_NAME && git config --get remote.origin.url )"
         LIB_STR="$LIB_URL $LIB_NAME"
-        echo "$LIB_STR" >> "$FIRMWAREDIR/../libs.txt"
+        echo "$LIB_STR" >> "$PROJECTDIR/libs.txt"
       fi
 
   else
-  echo "$LIB_NAME" >> "$FIRMWAREDIR/../libs.txt"
+  echo "$LIB_NAME" >> "$PROJECTDIR/libs.txt"
 
     fi
 
-  done < "$FIRMWAREDIR/../libs.temp.txt"
+  done < "$PROJECTDIR/libs.temp.txt"
 
-  rm "$FIRMWAREDIR/../libs.temp.txt"
+  rm "$PROJECTDIR/libs.temp.txt"
 
-  awk '!a[$0]++' "$FIRMWAREDIR/../libs.txt" > "$FIRMWAREDIR/../libs.temp.txt"
-  rm "$FIRMWAREDIR/../libs.txt"
-  mv "$FIRMWAREDIR/../libs.temp.txt" "$FIRMWAREDIR/../libs.txt"
+  awk '!a[$0]++' "$PROJECTDIR/libs.txt" > "$PROJECTDIR/libs.temp.txt"
+  rm "$PROJECTDIR/libs.txt"
+  mv "$PROJECTDIR/libs.temp.txt" "$PROJECTDIR/libs.txt"
 
   while read i ## Install and add required libs from libs.txt
   do
@@ -1574,7 +1566,7 @@ _lib-ex-load()
     addLib
     rmHeaders "$LIB_NAME"
     addHeaders "$LIB_NAME"
-  done < "$FIRMWAREDIR/../libs.txt"
+  done < "$PROJECTDIR/libs.txt"
 
   fi
 
@@ -1744,9 +1736,9 @@ _clean()
       make clean -s PLATFORM="$DEVICE_TYPE"  2>&1 /dev/null
     fi
 
-    if [ "$FIRMWAREDIR/../bin" != "$HOME/bin" ];
+    if [ "$PROJECTDIR/bin" != "$HOME/bin" ];
     then
-      rm -rf "$FIRMWAREDIR/../bin"
+      rm -rf "$PROJECTDIR/bin"
     fi
     blue_echo "Sucessfully cleaned."
     echo
@@ -1764,7 +1756,7 @@ _build()
     build_firmware || exit
 
     if [[ "$DEVICE_TYPE" != "pi" ]]; then
-      SIZES=$(arm-none-eabi-size "$FIRMWAREDIR/../bin/$TARGET_FILE.elf" | tail -1)
+      SIZES=$(arm-none-eabi-size "$PROJECTDIR/bin/$TARGET_FILE.elf" | tail -1)
       printSizes $SIZES
     fi
 
