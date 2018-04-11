@@ -445,7 +445,7 @@ cleanFirmware()
 
     if [ "$PROJECTDIR/bin" != "$HOME/bin" ];
     then
-      rm -rf "$PROJECTDIR/bin"
+      rm -rf "${PROJECTDIR:?}/bin"
     fi
     blue_echo "Sucessfully cleaned."
     echo
@@ -679,13 +679,13 @@ fi
 
     if grep -q "://" <<<"$1";
     then
-    GIT_ARGS=($1)
+    GIT_ARGS=( $1 )
 
     if [ "${GIT_ARGS[1]}" == "" ];
     then
-      git clone "${GIT_ARGS[0]}" || ( echo ; red_echo "Could not download Library.  Please supply a valid URL to a git repository." )
+      git clone "${GIT_ARGS[0]}" || ( echo ; red_echo "Could not download Library. Please supply a valid URL to a git repository." )
     else
-      git clone "${GIT_ARGS[0]}" "${GIT_ARGS[1]}" || ( echo ; red_echo "Could not download Library.  Please supply a valid URL to a git repository." )
+      git clone "${GIT_ARGS[0]}" "${GIT_ARGS[1]}" || ( echo ; red_echo "Could not download Library. Please supply a valid URL to a git repository." )
     fi
 
     else
@@ -1267,7 +1267,7 @@ _lib-rm()
       exit
     else
       echo
-      read -rp "Library $1 is not backed up.  Are you sure you want to remove it ? (yes/no): " answer
+      read -rp "Library $1 is not backed up. Are you sure you want to remove it ? (yes/no): " answer
       if [ "$answer" == "yes" ] || [ "$answer" == "y" ] || [ "$answer" == "Y" ];
       then
         echo
@@ -1338,7 +1338,7 @@ _lib-update()
 
 if [ "$(ls -1 $LIBRARY)" == "" ];
 then
-  red_echo "No libraries installed.  Use \"po lib get\" to download some."
+  red_echo "No libraries installed. Use \"po lib get\" to download some."
   exit
 fi
 
@@ -1468,13 +1468,13 @@ _lib-ex-load()
     if [ "$2" == "" ];
     then
       echo
-      red_echo "Please choose a valid example.  Use \"po lib ex ls libraryName\" to find examples."
+      red_echo "Please choose a valid example. Use \"po lib ex ls libraryName\" to find examples."
       echo
       exit
     fi
   else
   echo
-  red_echo "Please choose a valid example.  Use \"po lib ex ls libraryName\" to find examples."
+  red_echo "Please choose a valid example. Use \"po lib ex ls libraryName\" to find examples."
   echo
   exit
   fi
@@ -1624,7 +1624,7 @@ echo
 particle serial wifi
 fi
 echo
-blue_echo "You should now be able to claim your device.  Please run
+blue_echo "You should now be able to claim your device. Please run
 \"particle device add Device_ID\", using the Device_ID we found above."
 echo
 exit
@@ -1696,7 +1696,7 @@ echo
 if [ "$DEVICE_TYPE" == "core" ];
 then
 blue_echo "On the Spark Core, firmware is monolithic, meaning that the system
-firmware is packaged with the user firmware.  To use a core with po-util
+firmware is packaged with the user firmware. To use a core with po-util
 just manually put it into DFU mode the first time you flash to it."
 
 echo
@@ -1738,7 +1738,7 @@ _clean()
 
     if [ "$PROJECTDIR/bin" != "$HOME/bin" ];
     then
-      rm -rf "$PROJECTDIR/bin"
+      rm -rf "${PROJECTDIR:?}/bin"
     fi
     blue_echo "Sucessfully cleaned."
     echo
