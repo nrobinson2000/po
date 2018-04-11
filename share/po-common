@@ -803,8 +803,10 @@ initProject()
     if [[ "$FOLDER" == "/"* ]]; # Check for absolute or relative
     then
       FIRMWAREDIR="$FOLDER/firmware"
+      PROJECTDIR="$FOLDER"
     else
       FIRMWAREDIR="$CWD/$FOLDER/firmware"
+      PROJECTDIR="$CWD/$FOLDER"
     fi
 
     if [ -d "$FIRMWAREDIR" ];
