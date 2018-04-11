@@ -14,4 +14,4 @@ chmod +x config-expect
 
 ./config-expect
 
-po install ~/.po-util basic
+po install ~/.po-util/src basic
