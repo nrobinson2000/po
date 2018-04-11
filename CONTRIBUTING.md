@@ -23,6 +23,9 @@ Whenever possible, please follow these guidelines for contributions:
 ├── completion/
 │   └── po # Provides tab completion for the po command in bash
 ├── install # Universal installer: bash <(curl -sL get.po-util.com)
+├── depend/
+│   ├── 60-po-util.rules # Udev rules file for Linux
+│   └── custom-baud.zip  # stty replacement for Linux
 ├── man/
 │   └── po.1 # Manual page for po, what shows up when you do: man po
 ├── po.rb # macOS Homebrew formula for po
