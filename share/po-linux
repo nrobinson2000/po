@@ -284,20 +284,20 @@ then
   cd "$FIRMWARE_PARTICLE" || exit
     echo
     blue_echo "Installing Particle firmware from Github..."
-    git clone https://github.com/spark/firmware.git
+    git clone https://github.com/spark/firmware.git || git stash && git pull
 
   # clone RedBear DUO firmware repository
   cd "$FIRMWARE_DUO" || exit
     echo
     blue_echo "Installing RedBear Duo firmware from Github..."
-    git clone https://github.com/redbear/firmware.git
+    git clone https://github.com/redbear/firmware.git || git stash && git pull
 
 
   # clone Particle-Pi firmware repository
   cd "$FIRMWARE_PI" || exit
     echo
     blue_echo "Installing Particle-Pi firmware from Github..."
-    git clone https://github.com/spark/firmware.git
+    git clone https://github.com/spark/firmware.git || git stash && git pull
 fi
 
     green_echo "
