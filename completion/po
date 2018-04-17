@@ -15,12 +15,18 @@
 
 getModems()
 {
+    MODEM=""
     if [ "$(uname -s)" == "Linux" ]; then
-        ls /dev/ttyACM*
-
+        for modem in /dev/ttyACM*; do
+            MODEM+=" $modem"
+        done
     elif [[ "$(uname -s)" == "Darwin" ]]; then
-        ls /dev/cu.usbmodem*
+        for modem in /dev/cu.usbmodem*; do
+            MODEM+=" $modem"
+        done
     fi
+
+    [ -z "${MODEM##*\**}" ] && MODEM=""
 }
 
 _po-util()
@@ -142,7 +148,8 @@ _po-util()
         return 0
 
     elif [[ $prev == "-d" ]]; then
-        COMPREPLY=( $(compgen -W "$(getModems)" -- $cur) )
+        getModems
+        COMPREPLY=( $(compgen -W "$MODEM" -- $cur) )
         return 0
 
     elif [[ $prev == "add" ]] || [[ $prev == "import" ]]; then
