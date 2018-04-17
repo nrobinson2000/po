@@ -392,6 +392,8 @@ _update()
     rm -f ~/.po-util/doc/po-README.md
     curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
 
+    sudo curl -fsSLo /etc/bash_completion.d/po https://raw.githubusercontent.com/nrobinson2000/po/master/completion/po
+
     curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/po/master/man/po.1
     sudo mv po.1 /usr/local/share/man/man1/
     sudo mandb &> /dev/null
