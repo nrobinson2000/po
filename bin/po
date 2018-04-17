@@ -93,6 +93,11 @@ if [ "$1" == "serial" ] && [ "$2" == "monitor" ]; then
     _serial_monitor
 fi
 
+# po reboot
+if [ "$1" == "reboot" ]; then
+    _serial_close "$2" "$3"
+fi
+
 # po ls
 # List devices aviable over serial
 if [ "$1" == "list" ] || [ "$1" == "ls" ]; then
