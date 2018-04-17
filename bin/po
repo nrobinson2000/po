@@ -118,7 +118,7 @@ if [ "$1" == "serial" ] && [ "$2" == "open" ]; then
 fi
 
 # po serial close
-if [ "$1" == "serial" ] && [ "$2" == "open" ]; then
+if [ "$1" == "serial" ] && [ "$2" == "close" ]; then
     _serial_close "$3 "$4
 fi
 
