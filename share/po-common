@@ -970,7 +970,7 @@ _serial_close()
 {
     dfu_open "$1" "$2"
     sleep 1
-    _dfu-close
+    _dfu_close
 }
 
 _lib()
