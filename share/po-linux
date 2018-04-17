@@ -298,7 +298,7 @@ _list()
     done
 
     blue_echo "
-    Found the following Particle Devices:
+Found the following Particle Devices:
     "
 
     for device in /dev/ttyACM*; do

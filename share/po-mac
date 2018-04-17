@@ -143,10 +143,10 @@ _list()
     done
 
     blue_echo "
-    Found the following Particle Devices:
+Found the following Particle Devices:
     "
 
-    RAW_LOG="$(system_profiler SPUSBDataType)"
+    RAW_LOG="$(system_profiler SPUSBDataType 2> /dev/null)"
 
     for device in /dev/cu.usbmodem*; do
         if [[ -e $device ]]; then
