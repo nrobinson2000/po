@@ -38,5 +38,6 @@ Whenever possible, please follow these guidelines for contributions:
 # Conventions:
 
 - Please use [Shellcheck](https://www.shellcheck.net/) to test your contributions.
+- Please use [bashate](https://github.com/openstack-dev/bashate) to ensure your contributions are properly formatted.
 - All variables must be in `UPPER_CAMEL_CASE`
 - Your contributions must be compatible with older versions of bash. On macOS Sierra for example, bash `3.2.57(1)-release` is installed by default and your contributions must operate correctly.
