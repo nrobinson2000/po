@@ -67,12 +67,16 @@ _po-util()
         COMPREPLY=($(compgen -W "$primary" -- "$cur"))
         return 0
 
-    elif ( [[ $preprev == "init" ]] && ( [[ $prev == "photon" ]] || [[ $prev == "electron" ]] || [[ $prev == "P1" ]] || [[ $prev == "pi" ]] || [[ $prev == "duo" ]] || [[ $prev == "core" ]] )  ) || ( [[ $prev == "init" ]] && [[ -z "$platforms##*$preprev*" ]] ) ;  then
+    elif [[ $preprev == "init" ]] && [[ "$COMP_CWORD" == 3 ]];  then
         COMPREPLY=( $(compgen -d -- $cur) )
         return 0
 
-    elif [[ $prev == "init" ]]; then
+    elif [[ $prev == "init" ]] && [[ "$COMP_CWORD" == 2 ]]; then
         COMPREPLY=( $(compgen -W "$platforms" -- $cur) )
+        return 0
+
+    elif [[ $prev == "init" ]] && [[ "$COMP_CWORD" == 3 ]]; then
+        COMPREPLY=( $(compgen -d -- $cur) )
         return 0
 
     elif [[ $prev == "install" ]] && [[ $preprev == "po" ]]; then
