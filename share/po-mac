@@ -231,7 +231,7 @@ _update()
     echo
     blue_echo "Updating po-util.."
     brew update
-    brew upgrade newpo
+    brew upgrade po
 
     rm -f ~/.po-util/doc/po-README.md
     curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
