@@ -281,7 +281,7 @@ fi
             echo
             blue_echo "Your device must be connected by USB."
             echo
-            exit
+            exit 1
         fi
     else
         if [ -e "$MODEM" ]; then
@@ -292,7 +292,7 @@ fi
             echo
             blue_echo "Your device must be connected by USB."
             echo
-            exit
+            exit 1
         fi
     fi
 
@@ -488,9 +488,9 @@ build_firmware()
 
 ota() # device firmware
 {
-    find_objects "$2"
     DIRWARNING="true"
     BINWARNING="true"
+    find_objects "$2"
     if [ "$FINDDIRFAIL" == "true" ] || [ "$FINDBINFAIL" == "true" ]; then
         exit
     fi
@@ -507,7 +507,9 @@ ota() # device firmware
         if [ "$FINDDEVICESFAIL" == "true" ] || [[ -z "$DEVICES" ]]; then
             cd "$CWD" || exit
             echo "" > devices.txt
-            red_echo "Please list your devices in devices.txt"
+            red_echo "
+Please list your devices in devices.txt
+            "
             exit 1
         fi
         for DEVICE in $DEVICES; do
@@ -762,10 +764,16 @@ void loop() // Put code here to loop forever
 
     if [ "$DEVICE_TYPE" != "" ]; then
           echo "---
-cmd: po $DEVICE_TYPE build
+cmd: po
+args:
+  - $DEVICE_TYPE
+  - build
+sh: false
 
 targets:
   Build:
+    atomCommandName: po:Build Particle Firmware Locally
+    sh: false
     args:
       - $DEVICE_TYPE
       - build
@@ -773,6 +781,8 @@ targets:
     keymap: ctrl-alt-1
     name: Build
   Flash:
+    atomCommandName: po:Flash Particle Firmware Locally
+    sh: false
     args:
       - $DEVICE_TYPE
       - flash
@@ -780,6 +790,8 @@ targets:
     keymap: ctrl-alt-2
     name: Flash
   Clean:
+    atomCommandName: po:Clean Particle Firmware Locally
+    sh: false
     args:
       - $DEVICE_TYPE
       - clean
@@ -787,6 +799,8 @@ targets:
     keymap: ctrl-alt-3
     name: Clean
   DFU:
+    atomCommandName: po:Upload Particle Firmware Locally with DFU
+    sh: false
     args:
       - $DEVICE_TYPE
       - dfu
@@ -794,6 +808,8 @@ targets:
     keymap: ctrl-alt-4
     name: DFU
   OTA:
+    atomCommandName: po:Upload Particle Firmware Locally with OTA
+    sh: false
     args:
       - $DEVICE_TYPE
       - ota
