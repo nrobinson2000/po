@@ -78,7 +78,7 @@ red_echo()
 
 find_objects() #Consolidated function
 {
-    if [ "$1" != "" ]; then
+    if [ "$1" ]; then
         case "$1" in
             */)
                 #has slash
@@ -349,7 +349,7 @@ Could not find a device on $2
 
 switch_branch()
 {
-    if [ "$1" != "" ]; then
+    if [ "$1" ]; then
         if [ "$(git rev-parse --abbrev-ref HEAD)" != "$1" ]; then
             git checkout "$1" > /dev/null
         fi
@@ -555,7 +555,7 @@ config()
 
     # Check for arguments
 
-    if [ "$1" != "" ] && [ "$2" != "" ] && [ "$3" != "" ]; then
+    if [ "$1" ] && [ "$2" ] && [ "$3" ]; then
         BRANCH="$1"
         echo BRANCH="$BRANCH" >> $SETTINGS
 
@@ -699,7 +699,7 @@ addLib()
 
 addHeaders()
 {
-    [ "$1" != "" ] && HEADER="$1" || HEADER="$LIB_NAME"
+    [ "$1" ] && HEADER="$1" || HEADER="$LIB_NAME"
     if [ "$AUTO_HEADER" == "true" ]; then
         if (grep "#include \"$HEADER/$HEADER.h\"" "$FIRMWAREDIR/main.cpp") &> /dev/null; then
             echo "Already imported" &> /dev/null
@@ -778,7 +778,7 @@ void loop() // Put code here to loop forever
         cp "$HOME/.po-util/doc/po-README.md" "$PROJECTDIR/README.md"
     fi
 
-    if [ "$DEVICE_TYPE" != "" ]; then
+    if [ "$DEVICE_TYPE" ]; then
           echo "---
 cmd: po
 args:

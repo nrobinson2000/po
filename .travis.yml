@@ -19,6 +19,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash -x ci/linux ; fi
   - po
   - po config release/v0.6.3 duo false
+  - po info
   - po install
 script:
   - po init test && cd test
