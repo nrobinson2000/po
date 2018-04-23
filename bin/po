@@ -50,7 +50,7 @@ fi
 
 # po config
 if [ "$1" == "config" ]; then
-    _config
+    _config "$2" "$3" "$4"
 fi
 
 # Check if we have a saved settings file.  If not, create it.

@@ -553,34 +553,50 @@ config()
     echo FIRMWARE_PI="$FIRMWARE_PI" >> $SETTINGS
     echo "export PARTICLE_DEVELOP=1" >> $SETTINGS
 
-    # Particle
-    echo
-    blue_echo "Which branch of the Particle firmware would you like to use?
-    You can find the branches at https://github.com/spark/firmware/branches
-    If you are unsure, please enter \"release/stable\""
-    read -rp "Branch: " branch_variable
-    BRANCH="$branch_variable"
-    echo BRANCH="$BRANCH" >> $SETTINGS
-    echo
+    # Check for arguments
 
-    # RedBear DUO
-    blue_echo "Which branch of the RedBear DUO firmware would you like to use?
+    if [ "$1" != "" ] && [ "$2" != "" ] && [ "$3" != "" ]; then
+        BRANCH="$1"
+        echo BRANCH="$BRANCH" >> $SETTINGS
+
+        BRANCH_DUO="$2"
+        echo BRANCH_DUO="$BRANCH_DUO" >> $SETTINGS
+
+        AUTO_HEADER="$3"
+        echo AUTO_HEADER="$AUTO_HEADER" >> $SETTINGS
+
+        echo
+        green_echo "Configured using the following arguments: $1 $2 $3"
+    else
+        # Particle
+        echo
+        blue_echo "Which branch of the Particle firmware would you like to use?
+    You can find the branches at https://github.com/particle-iot/firmware/branches
+    If you are unsure, please enter \"release/stable\""
+        read -rp "Branch: " branch_variable
+        BRANCH="$branch_variable"
+        echo BRANCH="$BRANCH" >> $SETTINGS
+        echo
+
+        # RedBear DUO
+        blue_echo "Which branch of the RedBear DUO firmware would you like to use?
     You can find the branches at https://github.com/redbear/Duo/branches
     If you are unsure, please enter \"duo\""
-    read -rp "Branch: " branch_variable
-    BRANCH_DUO="$branch_variable"
-    echo BRANCH_DUO="$BRANCH_DUO" >> $SETTINGS
+        read -rp "Branch: " branch_variable
+        BRANCH_DUO="$branch_variable"
+        echo BRANCH_DUO="$BRANCH_DUO" >> $SETTINGS
 
-    echo
-    blue_echo "Shoud po-util automatically add and remove headers when using
+        echo
+        blue_echo "Shoud po-util automatically add and remove headers when using
     libraries?"
-    read -rp "(yes/no): " response
-    if [ "$response" == "yes" ] || [ "$response" == "y" ] || [ "$response" == "Y" ]; then
-        AUTO_HEADER="true"
-    else
-        AUTO_HEADER="false"
+        read -rp "(yes/no): " response
+        if [ "$response" == "yes" ] || [ "$response" == "y" ] || [ "$response" == "Y" ]; then
+            AUTO_HEADER="true"
+        else
+            AUTO_HEADER="false"
+        fi
+        echo AUTO_HEADER="$AUTO_HEADER" >> $SETTINGS
     fi
-    echo AUTO_HEADER="$AUTO_HEADER" >> $SETTINGS
     echo
 }
 
@@ -912,7 +928,7 @@ _config()
     if [ -f "$SETTINGS" ]; then
         rm "$SETTINGS"
     fi
-    config
+    config "$1" "$2" "$3"
     exit
 }
 
@@ -959,7 +975,7 @@ _serial_monitor()
     else
         screen -S particle "$MODEM"
         screen -S particle -X quit && exit || blue_echo "If \"po serial\" is putting device into DFU mode, you are likely experiencing this issue:
-https://github.com/spark/firmware/pull/934"
+https://github.com/particle-iot/firmware/pull/934"
     fi
     exit
 }

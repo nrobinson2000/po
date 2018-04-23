@@ -18,7 +18,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash -x ci/mac ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash -x ci/linux ; fi
   - po
-  - ci/config-expect
+  - po config release/v0.6.3 duo false
   - po install
 script:
   - po init test && cd test
