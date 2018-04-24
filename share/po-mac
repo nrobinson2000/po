@@ -48,9 +48,9 @@ _install()
     [ -d "$FIRMWARE_PI" ] || mkdir -p "$FIRMWARE_PI"  # If FIRMWARE_PI does not exist, create it
 
     # Enable bash completion
-    grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.profile" > /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.profile"
-    grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.bash_profile" > /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.bash_profile"
-    grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.bashrc" > /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.bashrc"
+    grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.profile" &> /dev/null|| echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.profile"
+    grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.bash_profile" &> /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.bash_profile"
+    grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.bashrc" &> /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.bashrc"
 
     LIBRARY=~/.po-util/lib # Create library directory
     if [ -d "$LIBRARY" ]; then    # if it is not found.
@@ -68,19 +68,19 @@ _install()
     cd "$FIRMWARE_PARTICLE" || exit
     echo
     blue_echo "Installing Particle firmware from Github..."
-    git clone https://github.com/particle-iot/firmware.git || ( cd firmware && git stash && git pull )
+    git clone https://github.com/particle-iot/firmware.git 2> /dev/null || ( cd firmware && git stash && git pull )
 
     # clone RedBear DUO firmware repository
     cd "$FIRMWARE_DUO" || exit
     echo
     blue_echo "Installing RedBear Duo firmware from Github..."
-    git clone https://github.com/redbear/firmware.git || ( cd firmware && git stash && git pull )
+    git clone https://github.com/redbear/firmware.git 2> /dev/null || ( cd firmware && git stash && git pull )
 
     # clone Particle-Pi firmware repository
     cd "$FIRMWARE_PI" || exit
     echo
     blue_echo "Installing Particle-Pi firmware from Github..."
-    git clone https://github.com/particle-iot/firmware.git || ( cd firmware && git stash && git pull )
+    git clone https://github.com/particle-iot/firmware.git 2> /dev/null || ( cd firmware && git stash && git pull )
 
     echo
 
@@ -93,7 +93,7 @@ _install()
 
     getNodeLTSVersion # Automatically get the latest LTS release of Node.js
 
-    if [ "$(hash node 2>/dev/null && node -v)" == "$NODEVERSION" ]; then
+    if [ "$(hash node &> /dev/null && node -v)" == "$NODEVERSION" ]; then
         echo
         blue_echo "Node.js version $NODEVERSION is already installed."
     else
@@ -104,13 +104,13 @@ _install()
     # Tracking
     SYSTEM_IP="$(curl -sS ipinfo.io/ip)"
     KERNEL="$(uname -s)"
-    curl -sS "https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$KERNEL/$BASH_VERSION@$SYSTEM_IP" > /dev/null &
+    curl -sS "https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$KERNEL/$BASH_VERSION@$SYSTEM_IP" &> /dev/null &
 
     GIT_NAME="$(git config --global user.name | sed 's/ /%20/g')"
     GIT_EMAIL="$(git config --global user.email)"
 
     if [[ "$GIT_NAME" != "" ]] || [[ "$GIT_EMAIL" != "" ]]; then
-        curl -sS "https://po-util-tracker.herokuapp.com/git/$GIT_NAME/$GIT_EMAIL/$BASH_VERSION@$SYSTEM_IP" > /dev/null &
+        curl -sS "https://po-util-tracker.herokuapp.com/git/$GIT_NAME/$GIT_EMAIL/$BASH_VERSION@$SYSTEM_IP" &> /dev/null &
     fi
 
     # Install particle-cli
@@ -167,7 +167,7 @@ _update()
 {
     SYSTEM_IP="$(curl -sS ipinfo.io/ip)"
     KERNEL="$(uname -s)"
-    curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" > /dev/null &
+    curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" &> /dev/null &
 
     if [ "$1" == "duo" ]; then # Update just duo firmware
         echo

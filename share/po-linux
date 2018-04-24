@@ -40,7 +40,7 @@ _install()
         exit
     fi
 
-    if ! hash curl 2>/dev/null; then
+    if ! hash curl &> /dev/null; then
         red_echo "
     po-util requires curl for the installation and updating of various tools.
     Please install \"curl\" with your package manager.
@@ -92,7 +92,7 @@ _install()
     # clone Particle firmware repository
     cd "$FIRMWARE_PARTICLE" || exit
 
-    if hash git 2>/dev/null; then
+    if hash git &> /dev/null; then
         NOGIT="false"
         echo
         blue_echo "Installing Particle firmware from Github..."
@@ -104,7 +104,7 @@ _install()
     # clone RedBear DUO firmware repository
     cd "$FIRMWARE_DUO" || exit
 
-    if hash git 2>/dev/null; then
+    if hash git &> /dev/null; then
         NOGIT="false"
         echo
         blue_echo "Installing RedBear Duo firmware from Github..."
@@ -116,7 +116,7 @@ _install()
     # clone Particle-Pi firmware repository
     cd "$FIRMWARE_PI" || exit
 
-    if hash git 2>/dev/null; then
+    if hash git &> /dev/null; then
         NOGIT="false"
         echo
         blue_echo "Installing Particle-Pi firmware from Github..."
@@ -125,13 +125,13 @@ _install()
         NOGIT="true"
     fi
 
-    if hash apt-get 2>/dev/null; then # Test if on a Debian-based system
+    if hash apt-get &> /dev/null; then # Test if on a Debian-based system
         DISTRO="deb" # Ubuntu / Debian
         INSTALLER="apt-get install -y"
-    elif hash yum 2>/dev/null; then
+    elif hash yum &> /dev/null; then
         DISTRO="rpm" # Fedora / Centos Linux
         INSTALLER="yum -y install"
-    elif hash pacman 2>/dev/null; then
+    elif hash pacman &> /dev/null; then
         DISTRO="arch" # Arch Linux
         INSTALLER="pacman -Syu"
     fi
@@ -141,7 +141,7 @@ _install()
 
     # Install dependencies
 
-    if hash arm-none-eabi-gcc 2>/dev/null; then #Test for arm-none-eabi-gcc
+    if hash arm-none-eabi-gcc &> /dev/null; then #Test for arm-none-eabi-gcc
         blue_echo "ARM toolchain version $GCC_ARM_VER is already installed... Continuing..."
     else
         blue_echo "Installing ARM toolchain and dependencies locally in $BINDIR/gcc-arm-embedded/..."
@@ -221,13 +221,13 @@ _install()
         # Tracking
         SYSTEM_IP="$(curl -sS ipinfo.io/ip)"
         KERNEL="$(uname -s)"
-        curl -sS "https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$KERNEL/$BASH_VERSION@$SYSTEM_IP" > /dev/null &
+        curl -sS "https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$KERNEL/$BASH_VERSION@$SYSTEM_IP" &> /dev/null &
 
         GIT_NAME="$(git config --global user.name | sed 's/ /%20/g')"
         GIT_EMAIL="$(git config --global user.email)"
 
         if [[ "$GIT_NAME" != "" ]] || [[ "$GIT_EMAIL" != "" ]]; then
-            curl -sS "https://po-util-tracker.herokuapp.com/git/$GIT_NAME/$GIT_EMAIL/$BASH_VERSION@$SYSTEM_IP" > /dev/null &
+            curl -sS "https://po-util-tracker.herokuapp.com/git/$GIT_NAME/$GIT_EMAIL/$BASH_VERSION@$SYSTEM_IP" &> /dev/null &
         fi
 
         # Install particle-cli
@@ -315,7 +315,7 @@ _update()
 {
     SYSTEM_IP="$(curl -sS ipinfo.io/ip)"
     KERNEL="$(uname -s)"
-    curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" > /dev/null &
+    curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" &> /dev/null &
 
     if [ "$1" == "duo" ]; then # Update just duo firmware
         echo

@@ -250,7 +250,7 @@ dfu_open()
 {
     DFU_LIST="$(dfu-util -l)"
 
-    if echo "$DFU_LIST" | grep "2b04:d006" > /dev/null || echo "$DFU_LIST" | grep "2b04:d008" > /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00a" > /dev/null || echo "$DFU_LIST" | grep "1d50:607f" > /dev/null || echo "$DFU_LIST" | grep "2b04:d058" > /dev/null; then
+    if echo "$DFU_LIST" | grep "2b04:d006" &> /dev/null || echo "$DFU_LIST" | grep "2b04:d008" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00a" &> /dev/null || echo "$DFU_LIST" | grep "1d50:607f" &> /dev/null || echo "$DFU_LIST" | grep "2b04:d058" &> /dev/null; then
         blue_echo "
 Already found a device in DFU mode!
 "
@@ -262,7 +262,7 @@ Already found a device in DFU mode!
             blue_echo "
 Placing device $2 into DFU mode...
 "
-            $_stty "$2" "$DFUBAUDRATE" > /dev/null
+            $_stty "$2" "$DFUBAUDRATE" &> /dev/null
             return
         else
             red_echo "
@@ -297,7 +297,7 @@ fi
     fi
 
     if [ -e "$MODEM" ]; then
-        $_stty "$MODEM" "$DFUBAUDRATE" > /dev/null
+        $_stty "$MODEM" "$DFUBAUDRATE" &> /dev/null
     fi
 }
 
@@ -308,7 +308,7 @@ serial_open()
             blue_echo "
 Placing device $2 into listening mode...
 "
-            $_stty "$2" "28800" > /dev/null
+            $_stty "$2" "28800" &> /dev/null
             return
         else
             red_echo "
@@ -343,7 +343,7 @@ Could not find a device on $2
     fi
 
     if [ -e "$MODEM" ]; then
-        $_stty "$MODEM" "28800" > /dev/null
+        $_stty "$MODEM" "28800" &> /dev/null
     fi
 }
 
@@ -351,11 +351,11 @@ switch_branch()
 {
     if [ "$1" ]; then
         if [ "$(git rev-parse --abbrev-ref HEAD)" != "$1" ]; then
-            git checkout "$1" > /dev/null
+            git checkout "$1" &> /dev/null
         fi
     else
         if [ "$(git rev-parse --abbrev-ref HEAD)" != "$BRANCH" ]; then
-            git checkout "$BRANCH" > /dev/null
+            git checkout "$BRANCH" &> /dev/null
         fi
     fi
 }
@@ -465,7 +465,7 @@ build_firmware()
         make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_FILE="$TARGET_FILE" TARGET_DIR="$PROJECTDIR/bin" PLATFORM="$DEVICE_TYPE" || exit
         cp "$FIRMWAREBIN" "$PROJECTDIR/$TARGET_FILE.bin"
     elif [ "$DEVICE_TYPE" == "pi" ]; then
-        if hash docker 2>/dev/null; then
+        if hash docker &> /dev/null; then
             if docker run --rm -i -v $FIRMWARE_PI/firmware:/firmware -v $FIRMWAREDIR:/input -v $PROJECTDIR/bin:/output particle/buildpack-raspberrypi 2> echo; then
                 echo
                 blue_echo "Successfully built firmware for Raspberry Pi"
@@ -645,7 +645,7 @@ getLib() # "$i" "$LIB_NAME"
             echo
             getLibURL "$LIB_QUERY"
 
-            if ( echo "$LIBURL" | grep "github" ) > /dev/null; then
+            if echo "$LIBURL" | grep "github" &> /dev/null; then
                 green_echo "$LIB_QUERY is availiable on GitHub!"
                 read -rp "Would you prefer to download it this way? (yes/no): " answer
 
@@ -1140,9 +1140,7 @@ _lib-add()
         exit
     fi
 
-    if [ -d "$LIBRARY/$1" ]; then
-        echo "Found" > /dev/null
-    else
+    if [ ! -d "$LIBRARY/$1" ]; then
         echo
         red_echo "Library $1 not found" ; echo ; exit
     fi
@@ -1274,7 +1272,7 @@ _lib-update()
     for OUTPUT in $(cd $LIBRARY && ls); do
         cd "$LIBRARY/$OUTPUT" || exit
 
-        if [ ! -z "$(ls $LIBRARY/$OUTPUT/.git/ 2>/dev/null )" ]; then # Only do git pull if it is a repository
+        if [ ! -z "$(ls $LIBRARY/$OUTPUT/.git/ &> /dev/null )" ]; then # Only do git pull if it is a repository
             blue_echo "Updating library $OUTPUT..."
             git pull
             echo
