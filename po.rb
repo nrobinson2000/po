@@ -28,11 +28,27 @@ class Po < Formula
   end
 
   def caveats; <<~EOS
-
   In order to complete the installation of po-util,
   you must run 'po install'.
 
   For Raspberry Pi support you must have docker installed.
   EOS
   end
+
+  test do
+    # `test do` will create, run in and delete a temporary directory.
+    #
+    # This test will fail and we won't accept that! For Homebrew/homebrew-core
+    # this will need to be a test that verifies the functionality of the
+    # software. Run the test with `brew test po`. Options passed
+    # to `brew install` such as `--HEAD` also need to be provided to `brew test`.
+    #
+    # The installed folder is not in the path, so use the entire path to any
+    # executables being tested: `system "#{bin}/program", "do", "something"`.
+
+    system "po", "config", "release/v0.6.3", "duo", "false"
+    system "po", "info"
+    system "po", "install"
+  end
+
 end
