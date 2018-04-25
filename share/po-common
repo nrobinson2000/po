@@ -859,7 +859,12 @@ po $DEVICE_TYPE build" > "$PROJECTDIR/ci/travis.sh"
     echo "bin/*
 *.bin" > "$PROJECTDIR/.gitignore"
     cd "$PROJECTDIR" || exit
-    git init &> /dev/null
+    
+    if [[ "$REGENERATE_DIR" != "true" ]]; then
+        git init &> /dev/null
+        git add -A &> /dev/null
+        git commit -m "Initial Commit by po" &> /dev/null
+    fi
 
     echo
     green_echo "Directory initialized as a po-util project for $DEVICE_TYPE"
