@@ -48,7 +48,8 @@ _po-util()
         prepreprev="${COMP_WORDS[COMP_CWORD-3]}"
     fi
 
-    primary="reboot create open photon electron P1 pi duo core help setup-atom config info install init serial dfu list ls update library lib"
+    primary="reboot create open photon electron P1 pi duo core help setup-atom
+    config info install init serial dfu list ls update library lib"
 
     device="init dfu upgrade patch ota build clean flash"
 

@@ -25,7 +25,8 @@ Whenever possible, please follow these guidelines for contributions:
 ├── install # Universal installer: bash <(curl -sL get.po-util.com)
 ├── depend/
 │   ├── 60-po-util.rules # Udev rules file for Linux
-│   └── custom-baud.zip  # stty replacement for Linux
+│   ├── custom-baud      # Set arbitrary baud rates with Linux
+│   └── custom-baud.zip  # .zip Archive of custom-baud
 ├── man/
 │   └── po.1 # Manual page for po, what shows up when you do: man po
 ├── po.rb # macOS Homebrew formula for po
