@@ -859,7 +859,7 @@ po $DEVICE_TYPE build" > "$PROJECTDIR/ci/travis.sh"
     echo "bin/*
 *.bin" > "$PROJECTDIR/.gitignore"
     cd "$PROJECTDIR" || exit
-    
+
     if [[ "$REGENERATE_DIR" != "true" ]]; then
         git init &> /dev/null
         git add -A &> /dev/null
@@ -1241,7 +1241,7 @@ _lib-pack()
         rm -rf "$PROJECTDIR/$PROJECTNAME-packaged.zip"
     fi
 
-    cp -r "$FIRMWAREDIR" "$PROJECTDIR/$PROJECTNAME-packaged"
+    cp -rL "$FIRMWAREDIR" "$PROJECTDIR/$PROJECTNAME-packaged"
     zip -r "$PROJECTDIR/$PROJECTNAME-packaged.zip" "$PROJECTDIR/$PROJECTNAME-packaged" &> /dev/null
     echo
     blue_echo "Firmware has been packaged as \"$PROJECTNAME-packaged\" and \"$PROJECTNAME-packaged.zip\"
