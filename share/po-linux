@@ -162,7 +162,7 @@ _install()
         # getLatestNodeVersion
         NODEVERSION="v8.9.1"
 
-        if [ "$(node -v)" == "$NODEVERSION" ]; then
+        if [ "$(hash node &> /dev/null && node -v)" == "$NODEVERSION" ]; then
             blue_echo "Node.js version $NODEVERSION is already installed."
         else
             # MESSAGE="Installing Node.js version $NODEVERSION..." ; blue_echo
