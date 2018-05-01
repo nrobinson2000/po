@@ -41,6 +41,9 @@ _install()
     curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
     chmod +x /usr/local/bin/po
 
+    blue_echo "Installing bash completion for po..."
+    curl -fsSLo /etc/bash_completion.d/po https://raw.githubusercontent.com/nrobinson2000/po/master/completion/po
+
     # create doc dir
     [ -d "$HOME/.po-util/doc" ] || mkdir -p "$HOME/.po-util/doc"  # If BASE_DIR does not exist, create it
 
@@ -162,7 +165,7 @@ _install()
     fi
 
     if [ "$DISTRO" == "deb" ]; then
-        $INSTALLER git bc nodejs python g++ make build-essential pkg-config libusb-1.0-0-dev libarchive-zip-perl screen libc6-i386 autoconf automake unzip software-properties-common
+        $INSTALLER git bc nodejs python-software-properties python g++ make build-essential pkg-config libusb-1.0-0-dev libarchive-zip-perl screen libc6-i386 autoconf automake unzip
         apt-get purge modemmanager
     fi
 
@@ -182,7 +185,7 @@ _install()
     else
 
         # Install dfu-util
-        blue_echo "Installing dfu-util..."
+        blue_echo "Installing dfu-util (requires ..."
         cd "$BASE_DIR" || exit
         git clone https://github.com/nrobinson2000/dfu-util
         cd dfu-util || exit
@@ -219,11 +222,6 @@ _install()
         blue_echo "Installing particle-cli..."
         npm install -g --unsafe-perm node-pre-gyp npm particle-cli
 
-        # Install udev rules file
-        blue_echo "Installing udev rule (requires  ..."
-        curl -fsSLO https://github.com/nrobinson2000/po/raw/master/depend/60-po-util.rules
-        mv 60-po-util.rules /etc/udev/rules.d/60-po-util.rules
-
         # Install manpage
         blue_echo "Installing po manpage..."
         curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/po/master/man/po.1
@@ -233,8 +231,6 @@ _install()
         mv po.1 /usr/local/share/man/man1/
         mandb &> /dev/null
 
-        blue_echo "Adding $USER to plugdev group..."
-        usermod -a -G plugdev "$USER"
     fi
 
     if [ "$NOGIT" == "true" ]; then
