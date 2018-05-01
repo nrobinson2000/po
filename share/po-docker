@@ -165,7 +165,7 @@ _install()
     fi
 
     if [ "$DISTRO" == "deb" ]; then
-        $INSTALLER git bc nodejs python g++ make build-essential pkg-config libusb-1.0-0-dev libarchive-zip-perl screen libc6-i386 autoconf automake unzip software-properties-common
+        $INSTALLER git bc nodejs python g++ make build-essential pkg-config libusb-1.0-0-dev libarchive-zip-perl screen libc6-i386 autoconf automake unzip software-properties-common vim-common
         apt-get purge modemmanager
     fi
 
