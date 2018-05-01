@@ -32,7 +32,7 @@ source "/usr/local/share/po-common"
 #### OS dependent features
 if [[ "$(uname -s)" == "Linux" ]]; then
     if [ -f "/.dockerenv" ]; then
-        source "/usr/local/share/po-docker";
+        source "/usr/local/share/po-docker"
     else
         source "/usr/local/share/po-linux"
     fi
