@@ -150,7 +150,7 @@ _install()
         # getLatestNodeVersion
         NODEVERSION="v8.9.1"
 
-        if [ "$(node -v)" == "$NODEVERSION" ]; then
+        if [ "$(hash node &> /dev/null && node -v)" == "$NODEVERSION" ]; then
             blue_echo "Node.js version $NODEVERSION is already installed."
         else
             # MESSAGE="Installing Node.js version $NODEVERSION..." ; blue_echo
@@ -185,7 +185,7 @@ _install()
     else
 
         # Install dfu-util
-        blue_echo "Installing dfu-util ..."
+        blue_echo "Installing dfu-util (requires )..."
         cd "$BASE_DIR" || exit
         git clone https://github.com/nrobinson2000/dfu-util
         cd dfu-util || exit
