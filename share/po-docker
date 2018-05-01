@@ -185,7 +185,7 @@ _install()
     else
 
         # Install dfu-util
-        blue_echo "Installing dfu-util (requires ..."
+        blue_echo "Installing dfu-util..."
         cd "$BASE_DIR" || exit
         git clone https://github.com/nrobinson2000/dfu-util
         cd dfu-util || exit
