@@ -31,7 +31,11 @@ source "/usr/local/share/po-common"
 
 #### OS dependent features
 if [[ "$(uname -s)" == "Linux" ]]; then
-    source "/usr/local/share/po-linux"
+    if [ -f "/.dockerenv" ]; then
+        source "/usr/local/share/po-docker";
+    else
+        source "/usr/local/share/po-linux"
+    fi
 else
     source "/usr/local/share/po-mac"
 fi
@@ -54,7 +58,7 @@ if [ "$1" == "config" ]; then
 fi
 
 # Check if we have a saved settings file.  If not, create it.
-if [ ! -f $SETTINGS ]; then
+if [ ! -f "$SETTINGS" ]; then
     echo
     blue_echo "Your \"$SETTINGS\" configuration file is missing.  Let's create it!"
     config
@@ -124,7 +128,7 @@ fi
 
 # po serial close
 if [ "$1" == "serial" ] && [ "$2" == "close" ]; then
-    _serial_close "$3 "$4
+    _serial_close "$3" "$4"
 fi
 
 # po update
