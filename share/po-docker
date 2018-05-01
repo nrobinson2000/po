@@ -36,13 +36,10 @@ _install()
         exit
     fi
 
-     curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-common
-     curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-linux
-     curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
-     chmod +x /usr/local/bin/po
-
-    blue_echo "Installing bash completion for po..."
-     curl -fsSLo /etc/bash_completion.d/po https://raw.githubusercontent.com/nrobinson2000/po/master/completion/po
+    curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-common
+    curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-linux
+    curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
+    chmod +x /usr/local/bin/po
 
     # create doc dir
     [ -d "$HOME/.po-util/doc" ] || mkdir -p "$HOME/.po-util/doc"  # If BASE_DIR does not exist, create it
@@ -159,22 +156,22 @@ _install()
             sed -n 's/.*\"\(.*.\)\".*/\1/p' node-oneline.txt > node-version.txt
 
             blue_echo "Installing Node.js version $(cat node-version.txt)..."
-            curl -sL https://"$DISTRO".nodesource.com/"$(cat node-version.txt)" |  -E bash -
+            bash <(curl -sL https://"$DISTRO".nodesource.com/"$(cat node-version.txt)")
             rm node-*.txt
         fi
     fi
 
     if [ "$DISTRO" == "deb" ]; then
-         $INSTALLER git bc nodejs python-software-properties python g++ make build-essential pkg-config libusb-1.0-0-dev libarchive-zip-perl screen libc6-i386 autoconf automake unzip
-         apt-get purge modemmanager
+        $INSTALLER git bc nodejs python-software-properties python g++ make build-essential pkg-config libusb-1.0-0-dev libarchive-zip-perl screen libc6-i386 autoconf automake unzip software-properties-common
+        apt-get purge modemmanager
     fi
 
     if [ "$DISTRO" == "rpm" ]; then
-         $INSTALLER git bc nodejs python make automake gcc gcc-c++ kernel-devel libusb glibc.i686 vim-common perl-Archive-Zip-1.58-1.fc24.noarch screen autoconf unzip
+        $INSTALLER git bc nodejs python make automake gcc gcc-c++ kernel-devel libusb glibc.i686 vim-common perl-Archive-Zip-1.58-1.fc24.noarch screen autoconf unzip
     fi
 
     if [ "$DISTRO" == "arch" ]; then
-         $INSTALLER git bc nodejs npm python gcc make automake libusb lib32-glibc vim yaourt screen autoconf
+        $INSTALLER git bc nodejs npm python gcc make automake libusb lib32-glibc vim yaourt screen autoconf
         yaourt -S perl-archive-zip unzip
     fi
 
@@ -185,7 +182,7 @@ _install()
     else
 
         # Install dfu-util
-        blue_echo "Installing dfu-util (requires )..."
+        blue_echo "Installing dfu-util..."
         cd "$BASE_DIR" || exit
         git clone https://github.com/nrobinson2000/dfu-util
         cd dfu-util || exit
@@ -193,7 +190,7 @@ _install()
         ./autogen.sh
         ./configure
         make
-         make install
+        make install
         cd ..
 
         # Install custom-baud
@@ -220,24 +217,24 @@ _install()
 
         # Install particle-cli
         blue_echo "Installing particle-cli..."
-         npm install -g --unsafe-perm node-pre-gyp npm particle-cli
+        npm install -g --unsafe-perm node-pre-gyp npm particle-cli
 
         # Install udev rules file
-        blue_echo "Installing udev rule (requires ) ..."
+        blue_echo "Installing udev rule (requires  ..."
         curl -fsSLO https://github.com/nrobinson2000/po/raw/master/depend/60-po-util.rules
-         mv 60-po-util.rules /etc/udev/rules.d/60-po-util.rules
+        mv 60-po-util.rules /etc/udev/rules.d/60-po-util.rules
 
         # Install manpage
         blue_echo "Installing po manpage..."
         curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/po/master/man/po.1
 
-        [ -d "/usr/local/share/man/man1/" ] ||  mkdir "/usr/local/share/man/man1/"
+        [ -d "/usr/local/share/man/man1/" ] || mkdir "/usr/local/share/man/man1/"
 
-         mv po.1 /usr/local/share/man/man1/
-         mandb &> /dev/null
+        mv po.1 /usr/local/share/man/man1/
+        mandb &> /dev/null
 
         blue_echo "Adding $USER to plugdev group..."
-         usermod -a -G plugdev "$USER"
+        usermod -a -G plugdev "$USER"
     fi
 
     if [ "$NOGIT" == "true" ]; then
@@ -362,29 +359,29 @@ _update()
 
     echo
     blue_echo "Updating particle-cli..."
-     npm update -g particle-cli
+    npm update -g particle-cli
 
     echo
     blue_echo "Updating po-util.."
 
-     rm /usr/local/share/po-common
-     curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-common
+    rm /usr/local/share/po-common
+    curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-common
 
-     rm /usr/local/share/po-linux
-     curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-linux
+    rm /usr/local/share/po-linux
+    curl -fsSLo /usr/local/share/po-linux https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-linux
 
-     rm /usr/local/bin/po
-     curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
-     chmod +x /usr/local/bin/po
+    rm /usr/local/bin/po
+    curl -fsSLo /usr/local/bin/po https://raw.githubusercontent.com/nrobinson2000/po/master/bin/po
+    chmod +x /usr/local/bin/po
 
     rm -f ~/.po-util/doc/po-README.md
     curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
 
-     curl -fsSLo /etc/bash_completion.d/po https://raw.githubusercontent.com/nrobinson2000/po/master/completion/po
+    curl -fsSLo /etc/bash_completion.d/po https://raw.githubusercontent.com/nrobinson2000/po/master/completion/po
 
     curl -fsSLO https://raw.githubusercontent.com/nrobinson2000/po/master/man/po.1
-     mv po.1 /usr/local/share/man/man1/
-     mandb &> /dev/null
+    mv po.1 /usr/local/share/man/man1/
+    mandb &> /dev/null
 
     echo
     exit
