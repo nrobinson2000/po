@@ -96,7 +96,7 @@ _install()
         NOGIT="false"
         echo
         blue_echo "Installing Particle firmware from Github..."
-        git clone https://github.com/particle-iot/firmware.git || ( cd firmware && git stash && git pull )
+        git clone "$PARTICLE_FIRMWARE_URL" || ( cd firmware && git stash && git pull )
     else
         NOGIT="true"
     fi
@@ -257,7 +257,7 @@ _install()
         cd "$FIRMWARE_PARTICLE" || exit
         echo
         blue_echo "Installing Particle firmware from Github..."
-        git clone https://github.com/particle-iot/firmware.git || ( cd firmware && git stash && git pull )
+        git clone "$PARTICLE_FIRMWARE_URL" || ( cd firmware && git stash && git pull )
 
         # clone RedBear DUO firmware repository
         cd "$FIRMWARE_DUO" || exit
@@ -407,6 +407,7 @@ _stty="custom-baud"
 # Configuration file is created at "~/.po-util/config"
 SETTINGS=~/.po-util/config
 BASE_DIR=~/.po-util/src
+PARTICLE_FIRMWARE_URL="https://github.com/particle-iot/firmware.git"
 FIRMWARE_PARTICLE=$BASE_DIR/particle
 FIRMWARE_DUO=$BASE_DIR/redbearduo
 FIRMWARE_PI=$BASE_DIR/pi
