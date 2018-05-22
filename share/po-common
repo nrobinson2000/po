@@ -514,10 +514,12 @@ Please list your devices in devices.txt
         fi
         for DEVICE in $DEVICES; do
             echo
-            blue_echo "Flashing to device $DEVICE..."
-            particle flash "$DEVICE" "$FIRMWAREBIN" || {
-                red_echo "Your device must be online in order to flash firmware OTA." && echo && exit 1
-                }
+            if particle list | grep "$DEVICE \[" | grep "online" &> /dev/null; then
+                blue_echo "Flashing to device $DEVICE..."
+                particle flash "$DEVICE" "$FIRMWAREBIN"
+            else
+                blue_echo "Skipping device $DEVICE since it's offline..."
+            fi
         done
         echo
         exit
