@@ -96,7 +96,7 @@ _install()
         NOGIT="false"
         echo
         blue_echo "Installing Particle firmware from Github..."
-        git clone "$PARTICLE_FIRMWARE_URL" || ( cd firmware && git stash && git pull )
+        git clone "$PARTICLE_FIRMWARE_URL" "firmware" || ( cd firmware && git stash && git pull )
     else
         NOGIT="true"
     fi
@@ -257,7 +257,7 @@ _install()
         cd "$FIRMWARE_PARTICLE" || exit
         echo
         blue_echo "Installing Particle firmware from Github..."
-        git clone "$PARTICLE_FIRMWARE_URL" || ( cd firmware && git stash && git pull )
+        git clone "$PARTICLE_FIRMWARE_URL" "firmware" || ( cd firmware && git stash && git pull )
 
         # clone RedBear DUO firmware repository
         cd "$FIRMWARE_DUO" || exit
