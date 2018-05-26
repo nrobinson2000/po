@@ -305,6 +305,7 @@ serial_open()
 {
     if [ "$1" == "-d" ] || [ "$1" == "--device" ]; then
         if [[ -e "$2" ]]; then # Check if serial port is avaliable
+            MODEM="$2"
             blue_echo "
 Placing device $2 into listening mode...
 "

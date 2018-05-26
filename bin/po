@@ -131,6 +131,18 @@ if [ "$1" == "serial" ] && [ "$2" == "close" ]; then
     _serial_close "$3" "$4"
 fi
 
+if [ "$1" == "safe" ] && [ "$2" == "open" ]; then
+    serial_open "$3" "$4"
+    echo "L" > "$MODEM"
+    sleep 2
+    echo "x" > "$MODEM"
+    exit
+fi
+
+if [ "$1" == "safe" ] && [ "$2" == "close" ]; then
+    _serial_close "$3" "$4"
+fi
+
 # po update
 # Update po-util
 if [ "$1" == "update" ]; then
