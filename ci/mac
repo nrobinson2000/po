@@ -1,5 +1,0 @@
-#!/bin/bash
-
-brew update
-brew tap nrobinson2000/po
-brew install po
