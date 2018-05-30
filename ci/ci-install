@@ -2,6 +2,7 @@
 # Script for installing po-util for Travis CI
 # bash <(curl -sL https://raw.githubusercontent.com/nrobinson2000/po/master/ci/ci-install)
 
+sudo apt update
 sudo apt install -y expect
 
 sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-common
