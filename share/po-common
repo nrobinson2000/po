@@ -95,42 +95,36 @@ find_objects() #Consolidated function
             PROJECTDIR="$CWD/$DIRECTORY"
             PROJECTNAME="${PROJECTDIR##*/}"
             TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
-            FIRMWAREBIN="$CWD/$DIRECTORY/bin/$TARGET_FILE.bin"
+            FIRMWAREBIN="$PROJECTDIR/bin/$TARGET_FILE.bin"
+        elif [ -d "$DIRECTORY" ] && [ -d "$DIRECTORY/firmware" ]; then
+            DEVICESFILE="$DIRECTORY/devices.txt"
+            FIRMWAREDIR="$DIRECTORY/firmware"
+            PROJECTDIR="$DIRECTORY"
+            PROJECTNAME="${PROJECTDIR##*/}"
+            TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+            FIRMWAREBIN="$PROJECTDIR/bin/$TARGET_FILE.bin"
+        elif [ -d "$CWD/$DIRECTORY" ] && [ -d "$CWD/firmware" ]; then
+            DEVICESFILE="$CWD/$DIRECTORY/../devices.txt"
+            FIRMWAREDIR="$CWD/$DIRECTORY"
+            PROJECTDIR="$(cd $FIRMWAREDIR/.. && pwd)"
+            PROJECTNAME="${PROJECTDIR##*/}"
+            TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+            FIRMWAREBIN="$PROJECTDIR/bin/$TARGET_FILE.bin"
+        elif [ "$DIRECTORY" == "." ] && [ -f "$CWD/main.cpp" ]; then
+            cd "$CWD/.." || exit
+            DEVICESFILE="$PWD/devices.txt"
+            FIRMWAREDIR="$CWD"
+            PROJECTDIR="$PWD"
+            PROJECTNAME="${PROJECTDIR##*/}"
+            TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
+            FIRMWAREBIN="$PROJECTDIR/bin/$TARGET_FILE.bin"
         else
-            if [ -d "$DIRECTORY" ] && [ -d "$DIRECTORY/firmware" ]; then
-                DEVICESFILE="$DIRECTORY/devices.txt"
-                FIRMWAREDIR="$DIRECTORY/firmware"
-                PROJECTDIR="$DIRECTORY"
-                PROJECTNAME="${PROJECTDIR##*/}"
-                TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
-                FIRMWAREBIN="$DIRECTORY/bin/$TARGET_FILE.bin"
-            else
-                if [ -d "$CWD/$DIRECTORY" ] && [ -d "$CWD/firmware" ]; then
-                    DEVICESFILE="$CWD/$DIRECTORY/../devices.txt"
-                    FIRMWAREDIR="$CWD/$DIRECTORY"
-                    PROJECTDIR="$(cd $FIRMWAREDIR/.. && pwd)"
-                    PROJECTNAME="${PROJECTDIR##*/}"
-                    TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
-                    FIRMWAREBIN="$CWD/$DIRECTORY/../bin/$TARGET_FILE.bin"
-                else
-                    if [ "$DIRECTORY" == "." ] && [ -f "$CWD/main.cpp" ]; then
-                        cd "$CWD/.." || exit
-                        DEVICESFILE="$PWD/devices.txt"
-                        FIRMWAREDIR="$CWD"
-                        PROJECTDIR="$PWD"
-                        PROJECTNAME="${PROJECTDIR##*/}"
-                        TARGET_FILE="$PROJECTNAME-$DEVICE_TYPE"
-                        FIRMWAREBIN="$PWD/bin/$TARGET_FILE.bin"
-                    else
-                        echo
-                        red_echo "Firmware not found!"
-                        blue_echo "Please run \"po init DEVICE FOLDER\" to setup a project,
+            echo
+            red_echo "Firmware not found!"
+            blue_echo "Please run \"po init DEVICE FOLDER\" to setup a project,
 or choose a valid directory."
-                        echo
-                        exit
-                    fi
-                fi
-            fi
+            echo
+            exit
         fi
     else
         DEVICESFILE="$CWD/devices.txt"
@@ -409,8 +403,8 @@ store_build_parameters() # Keep track of $DEVICE_TYPE and $FIRMWAREDIR
     [[ "$STORED_FIRMWAREDIR" != "$FIRMWAREDIR" ]] && FIRMWAREDIR_CHANGED="true"
 
     if [[ "$STORED_DEVICE_TYPE" != "$DEVICE_TYPE" ]] || [[ "$STORED_FIRMWAREDIR" != "$FIRMWAREDIR" ]]; then
-        echo "STORED_DEVICE_TYPE=$DEVICE_TYPE" > "$PARAMETERS"
-        echo "STORED_FIRMWAREDIR=$FIRMWAREDIR" >> "$PARAMETERS"
+        echo "STORED_DEVICE_TYPE=\"$DEVICE_TYPE\"" > "$PARAMETERS"
+        echo "STORED_FIRMWAREDIR=\"$FIRMWAREDIR\"" >> "$PARAMETERS"
     fi
 
     if [[ "$DEVICE_TYPE_CHANGED" ]] && [[ "$FIRMWAREDIR_CHANGED" ]]; then
