@@ -178,7 +178,7 @@ _install()
 
     if [ "$DISTRO" == "deb" ]; then
         sudo $INSTALLER git bc nodejs python g++ make build-essential pkg-config libusb-1.0-0-dev libarchive-zip-perl screen libc6-i386 autoconf automake unzip software-properties-common vim-common
-        sudo apt-get purge modemmanager
+        sudo apt-get purge -y modemmanager
     fi
 
     if [ "$DISTRO" == "rpm" ]; then
