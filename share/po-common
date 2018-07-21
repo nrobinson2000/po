@@ -553,7 +553,23 @@ config()
 
     # Check for arguments
 
-    if [ "$1" ] && [ "$2" ] && [ "$3" ]; then
+    # [ "$1" ] && BRANCH="$1" || BRANCH="release/stable"
+    # [ "$2" ] && BRANCH_DUO="$2" || BRANCH_DUO="duo"
+    # [ "$3" ] && AUTO_HEADER="$3" || AUTO_HEADER="false"
+
+    if [ "$1" ] && [ ! "$2" ] && [ ! "$3" ]; then
+      BRANCH="$1"
+      echo BRANCH="$BRANCH" >> $SETTINGS
+
+      BRANCH_DUO="duo"
+      echo BRANCH_DUO="$BRANCH_DUO" >> $SETTINGS
+
+      AUTO_HEADER="false"
+      echo AUTO_HEADER="$AUTO_HEADER" >> $SETTINGS
+
+      echo
+      green_echo "Configured using the following arguments: $BRANCH $BRANCH_DUO $AUTO_HEADER"
+    elif [ "$1" ] && [ "$2" ] && [ "$3" ]; then
         BRANCH="$1"
         echo BRANCH="$BRANCH" >> $SETTINGS
 
@@ -615,6 +631,13 @@ getLibURL()
     TOKEN="$(grep 'token' ~/.particle/particle.config.json | grep -oE '([0-Z])\w+' | grep -v 'token')"
     DATA=$(curl -sLH "Authorization: Bearer $TOKEN" "https://api.particle.io/v1/libraries/$1" | json_pp)
     LIBURL=$(echo "$DATA" | grep "url" | grep -oE '"((?:\\.|[^"\\])*)"' | grep "http" |  tr -d '"')
+}
+
+getFirmwareVersions()
+{
+  blue_echo "Finding Particle Device OS versions..."
+  curl -s "https://api.github.com/repos/particle-iot/firmware/releases" | grep "tag_name" | grep -Po "v(.*?)(?=\")" | sort | sed 's/^/release\//'
+  blue_echo "Use one of these versions with 'po config'"
 }
 
 getLib() # "$i" "$LIB_NAME"
