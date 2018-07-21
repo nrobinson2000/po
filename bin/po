@@ -55,6 +55,7 @@ fi
 # po versions
 if [ "$1" == "versions" ]; then
   getFirmwareVersions
+  exit
 fi
 
 # po config
