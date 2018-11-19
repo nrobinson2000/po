@@ -90,7 +90,7 @@ _po-util()
         COMPREPLY=( $(compgen -W "basic" -- $cur) )
         return 0
 
-    elif [[ $prev == "photon" ]] || [[ $prev == "electron" ]] || [[ $prev == "P1" ]] || [[ $prev == "pi" ]] || [[ $prev == "duo" ]] || [[ $prev == "core" ]]; then
+    elif [[ $prev == "photon" ]] || [[ $prev == "electron" ]] || [[ $prev == "P1" ]] || [[ $prev == "pi" ]] || [[ $prev == "duo" ]] || [[ $prev == "core" ]] || [[ $prev == "xenon" ]] || [[ $prev == "argon" ]] || [[ $prev == "boron" ]]; then
         COMPREPLY=( $(compgen -W "$device" -- $cur) )
         return 0
 
