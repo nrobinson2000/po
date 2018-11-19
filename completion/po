@@ -53,7 +53,7 @@ _po-util()
 
     device="init dfu upgrade patch ota build clean flash"
 
-    platforms="photon electron P1 pi duo core"
+    platforms="photon electron P1 pi duo core xenon argon boron"
 
     library="clean setup get install purge create add import remove rm list ls
     package pack export help update refresh source src view-headers examples ex"
