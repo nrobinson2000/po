@@ -181,8 +181,9 @@ of your devices on each line."
 
 validateDevicePlatform()
 {
-  # Make sure we are using photon, P1, electron, pi, core, or duo
-    if [ "$1" == "photon" ] || [ "$1" == "P1" ] || [ "$1" == "electron" ] || [ "$1" == "pi" ] || [ "$1" == "core" ] || [ "$1" == "duo" ]; then
+  # Make sure we are using photon, P1, electron, pi, core, duo
+  # TODO: Add mesh support: xenon, argon, boron
+    if [ "$1" == "photon" ] || [ "$1" == "P1" ] || [ "$1" == "electron" ] || [ "$1" == "pi" ] || [ "$1" == "core" ] || [ "$1" == "duo" ] || [ "$1" == "xenon" ] || [ "$1" == "argon" ] || [ "$1" == "boron" ]; then
         DEVICE_TYPE="$1"
 
         if [ "$DEVICE_TYPE" == "duo" ]; then
@@ -191,7 +192,7 @@ validateDevicePlatform()
 
         elif [ "$DEVICE_TYPE" == "pi" ]; then
             cd "$FIRMWARE_PI/firmware" || exit
-            switch_branch "feature/raspberry-pi"  &> /dev/null
+            switch_branch "$BRANCH_PI"  &> /dev/null
 
         else
             cd "$FIRMWARE_PARTICLE/firmware" || exit
