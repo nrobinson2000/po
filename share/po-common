@@ -585,7 +585,7 @@ config()
     else
         # Particle
         echo
-        blue_echo "Which branch of the Particle firmware would you like to use?
+        blue_echo "Which branch/tag of the Particle firmware would you like to use?
     You can find the branches at https://github.com/particle-iot/firmware/branches
     If you are unsure, please enter \"release/stable\""
         read -rp "Branch: " branch_variable
@@ -637,7 +637,7 @@ getLibURL()
 getFirmwareVersions()
 {
   blue_echo "Finding Particle Device OS versions..."
-  curl -s "https://api.github.com/repos/particle-iot/firmware/releases" | grep "tag_name" | grep -Po "v(.*?)(?=\")" | sort | sed 's/^/release\//'
+  curl -s "https://api.github.com/repos/particle-iot/firmware/releases" | grep "tag_name" | grep -Po "v(.*?)(?=\")" | sort -V
   blue_echo "Use one of these versions with 'po config'"
 }
 
