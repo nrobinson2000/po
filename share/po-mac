@@ -87,7 +87,8 @@ _install()
     # Install ARM toolchain
     blue_echo "Installing ARM toolchain..."
     brew update
-    brew install gcc-arm-none-eabi-53 dfu-util
+    brew install gcc-arm-none-eabi-53 dfu-util grep
+    brew link grep
 
     #getLatestNodeVersion
 
