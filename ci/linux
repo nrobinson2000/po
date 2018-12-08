@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo apt-get update
 sudo apt-get install -y expect
 
 sudo curl -fsSLo /usr/local/share/po-common https://raw.githubusercontent.com/nrobinson2000/po/master/share/po-common
