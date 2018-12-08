@@ -602,8 +602,7 @@ config()
         echo BRANCH_DUO="$BRANCH_DUO" >> $SETTINGS
 
         echo
-        blue_echo "Shoud po-util automatically add and remove headers when using
-    libraries?"
+        blue_echo "Shoud po-util automatically add and remove headers when using libraries?"
         read -rp "(yes/no): " response
         if [ "$response" == "yes" ] || [ "$response" == "y" ] || [ "$response" == "Y" ]; then
             AUTO_HEADER="true"
