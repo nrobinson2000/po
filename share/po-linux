@@ -171,6 +171,8 @@ _install()
             sed -n 's/.*\"\(.*.\)\".*/\1/p' node-oneline.txt > node-version.txt
 
             cat node-*.txt
+            echo "$DISTRO"
+
 
             blue_echo "Installing Node.js version $(cat node-version.txt)..."
             curl -sL https://"$DISTRO".nodesource.com/"$(cat node-version.txt)" | sudo -E bash -
