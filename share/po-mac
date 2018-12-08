@@ -68,19 +68,19 @@ _install()
     cd "$FIRMWARE_PARTICLE" || exit
     echo
     blue_echo "Installing Particle firmware from Github..."
-    git clone "$PARTICLE_FIRMWARE_URL" "firmware" || ( cd firmware && git stash && git pull )
+    git clone "$PARTICLE_FIRMWARE_URL" "firmware" || ( cd firmware && git stash &> /dev/null && git fetch )
 
     # clone RedBear DUO firmware repository
     cd "$FIRMWARE_DUO" || exit
     echo
     blue_echo "Installing RedBear Duo firmware from Github..."
-    git clone https://github.com/redbear/firmware.git || ( cd firmware && git stash && git pull )
+    git clone https://github.com/redbear/firmware.git || ( cd firmware && git stash &> /dev/null && git fetch )
 
     # clone Particle-Pi firmware repository
     cd "$FIRMWARE_PI" || exit
     echo
     blue_echo "Installing Particle-Pi firmware from Github..."
-    git clone https://github.com/particle-iot/firmware.git || ( cd firmware && git stash && git pull )
+    git clone https://github.com/particle-iot/firmware.git || ( cd firmware && git stash &> /dev/null && git fetch )
 
     echo
 
@@ -174,9 +174,9 @@ _update()
         echo
         blue_echo "Updating RedBear DUO firmware.."
         cd "$FIRMWARE_DUO/firmware" || exit
-        git stash
+        git stash &> /dev/null
         switch_branch "$BRANCH_DUO" &> /dev/null
-        git pull
+        git fetch
         echo
         exit
     fi
@@ -185,9 +185,9 @@ _update()
         echo
         blue_echo "Updating Particle firmware..."
         cd "$FIRMWARE_PARTICLE/firmware" || exit
-        git stash
+        git stash &> /dev/null
         switch_branch &> /dev/null
-        git pull
+        git fetch
         echo
         exit
     fi
@@ -196,9 +196,9 @@ _update()
         echo
         blue_echo "Updating Particle-Pi firmware..."
         cd "$FIRMWARE_PI/firmware" || exit
-        git stash
+        git stash &> /dev/null
         switch_branch "$BRANCH_PI" &> /dev/null
-        git pull
+        git fetch
         echo
         exit
     fi
@@ -207,23 +207,23 @@ _update()
     echo
     blue_echo "Updating RedBear DUO firmware..."
     cd "$FIRMWARE_DUO/firmware" || exit
-    git stash
+    git stash &> /dev/null
     switch_branch "$BRANCH_DUO" &> /dev/null
-    git pull
+    git fetch
 
     echo
     blue_echo "Updating Particle firmware..."
     cd "$FIRMWARE_PARTICLE/firmware" || exit
-    git stash
+    git stash &> /dev/null
     switch_branch &> /dev/null
-    git pull
+    git fetch
 
     echo
     blue_echo "Updating Particle-Pi firmware..."
     cd "$FIRMWARE_PI/firmware" || exit
-    git stash
+    git stash &> /dev/null
     switch_branch "$BRANCH_PI" &> /dev/null
-    git pull
+    git fetch
 
     echo
     blue_echo "Updating particle-cli..."
@@ -232,7 +232,7 @@ _update()
     echo
     blue_echo "Updating po-util.."
     brew update
-    brew upgrade po
+    brew upgrade po 2> /dev/null
 
     rm -f ~/.po-util/doc/po-README.md
     curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
