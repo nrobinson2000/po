@@ -965,7 +965,7 @@ $(tput bold)$(tput setaf 3)$(date)$(tput sgr0)
 
 $(tput bold)$(tput setaf 2)- Configured Settings -$(tput sgr0)
 
-$(tput bold)Firmware Branches:$(tput sgr0)
+$(tput bold)Firmware Versions:$(tput sgr0)
 $(tput bold)Particle: $(tput setaf 6)$BRANCH$(tput sgr0)
 $(tput bold)Duo: $(tput setaf 6)$BRANCH_DUO$(tput sgr0)
 
