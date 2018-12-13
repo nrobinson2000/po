@@ -211,6 +211,14 @@ validateDevicePlatform()
         exit 1
     fi
 
+    if [ "$DEVICE_TYPE" == "xenon" ]; then
+        DFU_ADDRESS1="2b04:d00e"
+        DFU_ADDRESS2="0x000d4000"
+    fi
+    if [ "$DEVICE_TYPE" == "argon" ]; then
+        DFU_ADDRESS1="2b04:d00c"
+        DFU_ADDRESS2="0x000d4000"
+    fi
     if [ "$DEVICE_TYPE" == "photon" ]; then
         DFU_ADDRESS1="2b04:d006"
         DFU_ADDRESS2="0x080A0000"
@@ -245,7 +253,8 @@ dfu_open()
 {
     DFU_LIST="$(dfu-util -l)"
 
-    if echo "$DFU_LIST" | grep "2b04:d006" &> /dev/null || echo "$DFU_LIST" | grep "2b04:d008" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00a" &> /dev/null || echo "$DFU_LIST" | grep "1d50:607f" &> /dev/null || echo "$DFU_LIST" | grep "2b04:d058" &> /dev/null; then
+    # TODO: Clean up this conditional and add mesh devices
+    if echo "$DFU_LIST" | grep "2b04:d006" &> /dev/null || echo "$DFU_LIST" | grep "2b04:d008" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00a" &> /dev/null || echo "$DFU_LIST" | grep "1d50:607f" &> /dev/null || echo "$DFU_LIST" | grep "2b04:d058" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00c" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00e" &> /dev/null; then
         blue_echo "
 Already found a device in DFU mode!
 "
@@ -258,6 +267,9 @@ Already found a device in DFU mode!
 Placing device $2 into DFU mode...
 "
             $_stty "$2" "$DFUBAUDRATE" &> /dev/null
+            if [[ "$(uname -s)" == "Linux" ]]; then
+              stty -F "$2" 9600 &>/dev/null
+            fi
             return
         else
             red_echo "
@@ -293,6 +305,9 @@ fi
 
     if [ -e "$MODEM" ]; then
         $_stty "$MODEM" "$DFUBAUDRATE" &> /dev/null
+        if [[ "$(uname -s)" == "Linux" ]]; then
+          stty -F "$MODEM" 9600 &>/dev/null
+        fi
     fi
 }
 
@@ -305,6 +320,9 @@ serial_open()
 Placing device $2 into listening mode...
 "
             $_stty "$2" "28800" &> /dev/null
+            if [[ "$(uname -s)" == "Linux" ]]; then
+              stty -F "$2" 9600 &>/dev/null
+            fi
             return
         else
             red_echo "
@@ -340,6 +358,9 @@ Could not find a device on $2
 
     if [ -e "$MODEM" ]; then
         $_stty "$MODEM" "28800" &> /dev/null
+        if [[ "$(uname -s)" == "Linux" ]]; then
+          stty -F "$MODEM" 9600 &>/dev/null
+        fi
     fi
 }
 
@@ -1019,7 +1040,7 @@ _dfu_open()
     exit
 }
 
-_dfu_close()
+_dfu_close() # TODO: Mesh devices need a specific usb id and dfu address for this to work
 {
     dfu-util -d 2b04:D006 -a 0 -i 0 -s 0x080A0000:leave -D /dev/null &> /dev/null
     exit
@@ -1573,7 +1594,7 @@ _dfu()
 
 _upgrade()
 {
-    if [ "$DEVICE_TYPE" == "photon" ] || [ "$DEVICE_TYPE" == "P1" ] || [ "$DEVICE_TYPE" == "electron" ]; then
+  if [ "$DEVICE_TYPE" == "photon" ] || [ "$DEVICE_TYPE" == "P1" ] || [ "$DEVICE_TYPE" == "electron" ] || [ "$DEVICE_TYPE" == "xenon" ] || [ "$DEVICE_TYPE" == "argon" ] || [ "$DEVICE_TYPE" == "boron" ]; then
         pause "Connect your device and put into DFU mode. Press [ENTER] to continue..."
 
         cd "$FIRMWARE_PARTICLE/firmware/modules" || exit
