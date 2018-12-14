@@ -18,7 +18,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash -x ci/mac ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash -x ci/linux ; fi
   - po
-  - po config release/v0.6.3 duo false
+  - po config v0.8.0-rc.11
   - po info
   - po install
 script:
@@ -27,3 +27,8 @@ script:
   - po electron build
   - po P1 build
   - po core build
+  - po config v0.8.0-rc.26
+  - po setup-mesh
+  - po xenon build
+  - po argon build
+  - po boron build
