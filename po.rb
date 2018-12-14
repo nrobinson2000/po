@@ -1,8 +1,8 @@
 class Po < Formula
   desc "Particle Offline Utility: The Ultimate Local Particle Experience"
   homepage "https://po-util.com"
-  url "https://github.com/nrobinson2000/po/archive/0.6.2.tar.gz"
-  sha256 "2aa4c1745fc8332e479b5ab7cfe73ccab256a367036b127e30e4deebd993bc61"
+  url "https://github.com/nrobinson2000/po/archive/0.6.3.tar.gz"
+  sha256 "c9d49bea4ecf50c16faadf97e1c94a85f86506c22a44aa3a7826ac24354cfa3a"
   head "https://github.com/nrobinson2000/po", :using => :git
 
   def install
