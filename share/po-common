@@ -637,14 +637,14 @@ config()
         echo AUTO_HEADER="$AUTO_HEADER" >> $SETTINGS
     fi
 
-        cd "$FIRMWARE_DUO/firmware" || exit
-        switch_branch "$BRANCH_DUO" &> /dev/null
+    cd "$FIRMWARE_DUO/firmware" || exit
+    switch_branch "$BRANCH_DUO" &> /dev/null
 
-        cd "$FIRMWARE_PI/firmware" || exit
-        switch_branch "$BRANCH_PI"  &> /dev/null
+    cd "$FIRMWARE_PI/firmware" || exit
+    switch_branch "$BRANCH_PI" &> /dev/null
 
-        cd "$FIRMWARE_PARTICLE/firmware" || exit
-        switch_branch &> /dev/null
+    cd "$FIRMWARE_PARTICLE/firmware" || exit
+    switch_branch &> /dev/null
 
     echo
 }
