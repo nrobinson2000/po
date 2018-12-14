@@ -52,6 +52,11 @@ if [ "$1" == "setup-atom" ]; then
     _setup-atom
 fi
 
+# po setup-mesh
+if [ "$1" == "setup-mesh" ]; then
+    _setup-mesh
+fi
+
 # po versions
 if [ "$1" == "versions" ]; then
   getFirmwareVersions

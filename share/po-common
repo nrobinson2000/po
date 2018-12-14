@@ -974,6 +974,17 @@ _setup-atom()
     exit
 }
 
+_setup-mesh()
+{
+  echo
+  blue_echo "Installing additional dependencies for Particle Mesh..."
+  echo
+  cd "$FIRMWARE_PARTICLE/firmware"
+  git submodule update --init
+  echo
+  exit
+}
+
 _config()
 {
     if [ -f "$SETTINGS" ]; then
