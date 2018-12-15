@@ -250,7 +250,6 @@ build_message()
     green_echo "
 Binary saved to $PROJECTNAME/$TARGET_FILE.bin
     "
-    exit
 }
 
 dfu_open()
@@ -551,7 +550,6 @@ Please list your devices in devices.txt
         red_echo "Try using \"particle flash\" if you are having issues." && echo && exit 1
         }
     echo
-    exit
 }
 
 config()
@@ -995,7 +993,7 @@ _setup-mesh()
   echo
   blue_echo "Installing additional dependencies for Particle Mesh..."
   echo
-  cd "$FIRMWARE_PARTICLE/firmware"
+  cd "$FIRMWARE_PARTICLE/firmware" || exit
   git submodule update --init
   echo
   exit
@@ -1059,8 +1057,7 @@ _serial_monitor()
         red_echo "No device connected!"
     else
         screen -S particle "$MODEM"
-        screen -S particle -X quit && exit || blue_echo "If \"po serial\" is putting device into DFU mode, you are likely experiencing this issue:
-https://github.com/particle-iot/firmware/pull/934"
+        screen -S particle -X quit
     fi
     exit
 }
@@ -1073,6 +1070,7 @@ _dfu_open()
 
 _dfu_close() # TODO: Mesh devices need a specific usb id and dfu address for this to work
 {
+
     dfu-util -d 2b04:D006 -a 0 -i 0 -s 0x080A0000:leave -D /dev/null &> /dev/null
     exit
 }
@@ -1693,7 +1691,6 @@ _clean()
     fi
     blue_echo "Sucessfully cleaned."
     echo
-    exit
 }
 
 _build()
@@ -1715,22 +1712,18 @@ _build()
 
 _flash()
 {
-    DIRWARNING="true"
-    find_objects "$1"
-    if [ "$FINDDIRFAIL" == "true" ]; then
-        exit
-    fi
-    if [ "$DEVICE_TYPE" == "pi" ]; then
-        build_firmware
-        ota "-m"
-        exit
-    fi
-    dfu_open
-    echo
-    ( build_firmware && echo && green_echo "Building firmware was successful! Flashing with dfu-util..." && echo ) || ( echo && red_echo 'Building firmware failed! Closing DFU...' && echo && dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D /dev/null &> /dev/null && exit )
-    dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN" || exit #&> /dev/null
-    echo
-    blue_echo "Firmware successfully flashed to $DEVICE_TYPE on $MODEM"
-    echo
+  _build "$1"
+
+  if [ "$DEVICE_TYPE" == "pi" ]; then
+    ota "-m"
     exit
+  fi
+
+  green_echo "Building firmware was successful! Flashing with dfu-util..."
+  echo
+  dfu_open
+  sleep 1
+
+  dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN"
+  echo
 }

@@ -310,6 +310,7 @@ fi
 # Clean firmware directory
 if [ "$2" == "clean" ]; then
     _clean "$3"
+    exit
 fi
 
 # po DEVICE ota
@@ -317,16 +318,19 @@ fi
 # Use --multi to flash multiple devices at once.  This reads a file named devices.txt
 if [ "$2" == "ota" ]; then
     ota "$3"
+    exit
 fi
 
 # po DEVICE build
 if [ "$2" == "build" ]; then
     _build "$3"
+    exit
 fi
 
 # po DEVICE flash
 if [ "$2" == "flash" ]; then
     _flash "$3"
+    exit
 fi
 
 # If an improper command is chosen:
