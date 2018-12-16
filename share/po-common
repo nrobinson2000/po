@@ -254,10 +254,10 @@ Binary saved to $PROJECTNAME/$TARGET_FILE.bin
 dfu_open()
 {
   DFU_LIST="$(dfu-util -l | xargs)"
-  DFU_ADDRESS1="${DFU_LIST##*Found DFU: [}"
-  DFU_ADDRESS1="${DFU_ADDRESS1%%]*}"
+  DFU_ADDRESS="${DFU_LIST##*Found DFU: [}"
+  DFU_ADDRESS="${DFU_ADDRESS%%]*}"
 
-  if [[ "$DFU_ADDRESS1" =~ 2b04:d0* ]] || [[ "$DFU_ADDRESS1" =~ 1d50:* ]]; then
+  if [[ "$DFU_ADDRESS" =~ 2b04:d0* ]] || [[ "$DFU_ADDRESS" =~ 1d50:* ]]; then
         blue_echo "
 Already found a device in DFU mode!
 "
@@ -390,17 +390,14 @@ common_commands() #List common commands
 
 cleanFirmware()
 {
-    if [ "$DEVICE_TYPE" == "duo" ]; then
-        cd "$FIRMWARE_DUO"/firmware || exit
-    else
-        cd "$FIRMWARE_PARTICLE"/firmware || exit
-    fi
-
     if [ "$DEVICE_TYPE" == "pi" ]; then
+      cd "$FIRMWARE_PI"/firmware || exit
         switch_branch "feature/raspberry-pi"  &> /dev/null
     elif [ "$DEVICE_TYPE" == "duo" ]; then
+      cd "$FIRMWARE_DUO"/firmware || exit
         switch_branch "$BRANCH_DUO" &> /dev/null
     else
+        cd "$FIRMWARE_PARTICLE"/firmware || exit
         switch_branch &> /dev/null
     fi
 
@@ -433,12 +430,15 @@ store_build_parameters() # Keep track of $DEVICE_TYPE and $FIRMWAREDIR
     fi
 
     if [[ "$DEVICE_TYPE_CHANGED" ]] && [[ "$FIRMWAREDIR_CHANGED" ]]; then
+        echo
         blue_echo "Detected change of platform and project. Cleaning before attempting build..."
         cleanFirmware
     elif [[ "$DEVICE_TYPE_CHANGED" ]]; then
+        echo
         blue_echo "Detected change of platform. Cleaning before attempting build..."
         cleanFirmware
     elif [[ "$FIRMWAREDIR_CHANGED" ]]; then
+        echo
         blue_echo "Detected change of project. Cleaning before attempting build..."
         cleanFirmware
     fi
@@ -482,7 +482,7 @@ build_firmware()
     print_logo
 
     if [ "$DEVICE_TYPE" == "duo" ]; then
-        make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_FILE="$TARGET_FILE" TARGET_DIR="$PROJECTDIR/bin" PLATFORM="$DEVICE_TYPE" || exit
+        make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_FILE="$TARGET_FILE" TARGET_DIR="$PROJECTDIR/bin" PLATFORM="$DEVICE_TYPE" || return 1
         cp "$FIRMWAREBIN" "$PROJECTDIR/$TARGET_FILE.bin"
     elif [ "$DEVICE_TYPE" == "pi" ]; then
         if hash docker &> /dev/null; then
@@ -501,7 +501,7 @@ build_firmware()
             exit 1
         fi
     else
-        make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$PROJECTDIR/bin" TARGET_FILE="$TARGET_FILE" PLATFORM="$DEVICE_TYPE" || exit
+        make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$PROJECTDIR/bin" TARGET_FILE="$TARGET_FILE" PLATFORM="$DEVICE_TYPE" || return 1
         cp "$FIRMWAREBIN" "$PROJECTDIR/$TARGET_FILE.bin"
     fi
 }
@@ -656,9 +656,7 @@ config()
 getAddedLibs()
 {
     find_objects "$1"
-    if [ "$FINDDIRFAIL" == "true" ]; then
-        exit
-    fi
+    [ "$FINDDIRFAIL" == "true" ] && exit
 
     for i in $FIRMWAREDIR/*/; do
         basename "$i"
@@ -1062,26 +1060,19 @@ _serial_monitor()
     exit
 }
 
-_dfu_open()
-{
-    dfu_open "$1" "$2"
-    exit
-}
-
-_dfu_close()
+dfu_close()
 {
   DFU_LIST="$(dfu-util -l | xargs)"
-  DFU_ADDRESS1="${DFU_LIST##*Found DFU: [}"
-  DFU_ADDRESS1="${DFU_ADDRESS1%%]*}"
+  DFU_ADDRESS="${DFU_LIST##*Found DFU: [}"
+  DFU_ADDRESS="${DFU_ADDRESS%%]*}"
 
-  if [[ "$DFU_ADDRESS1" =~ 2b04:d0* ]] || [[ "$DFU_ADDRESS1" =~ 1d50:* ]]; then
-    dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s 0x00010000:leave -D /dev/null &> /dev/null || dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s 0x080A0000:leave -D /dev/null &> /dev/null
+  if [[ "$DFU_ADDRESS" =~ 2b04:d0* ]] || [[ "$DFU_ADDRESS" =~ 1d50:* ]]; then
+    dfu-util -d "$DFU_ADDRESS" -a 0 -i 0 -s 0x00010000:leave -D /dev/null &> /dev/null || dfu-util -d "$DFU_ADDRESS" -a 0 -i 0 -s 0x080A0000:leave -D /dev/null &> /dev/null
   else
     echo
     red_echo "No Particle Devices in DFU mode found!"
     echo
   fi
-  exit
 }
 
 _serial_open()
@@ -1094,7 +1085,8 @@ _serial_close()
 {
     dfu_open "$1" "$2"
     sleep 1
-    _dfu_close
+    dfu_close
+    exit
 }
 
 _lib()
@@ -1615,9 +1607,7 @@ _dfu()
 {
     BINWARNING="true"
     find_objects "$1"
-    if [ "$FINDBINFAIL" == "true" ]; then
-        exit
-    fi
+    [ "$FINDBINFAIL" == "true" ] && exit
     dfu_open
     sleep 1
     echo
@@ -1682,34 +1672,18 @@ _clean()
 {
     DIRWARNING="true"
     find_objects "$1"
-    if [ "$FINDDIRFAIL" == "true" ]; then
-        exit
-    fi
-    git stash &> /dev/null
+    [ "$FINDDIRFAIL" == "true" ] && exit
     echo
     blue_echo "Cleaning firmware..."
-    echo
-    if [ "$DEVICE_TYPE" == "pi" ]; then
-        make clean -s 2>&1 /dev/null
-    else
-        make clean -s PLATFORM="$DEVICE_TYPE"  2>&1 /dev/null
-    fi
-
-    if [ "$PROJECTDIR/bin" != "$HOME/bin" ]; then
-        rm -rf "${PROJECTDIR:?}/bin"
-    fi
-    blue_echo "Sucessfully cleaned."
-    echo
+    cleanFirmware
 }
 
 _build()
 {
     DIRWARNING="true"
     find_objects "$1"
-    if [ "$FINDDIRFAIL" == "true" ]; then
-        exit
-  fi
-    build_firmware || exit
+    [ "$FINDDIRFAIL" == "true" ] && exit
+    build_firmware || return 1
 
     if [[ "$DEVICE_TYPE" != "pi" ]]; then
         SIZES=$(arm-none-eabi-size "$PROJECTDIR/bin/$TARGET_FILE.elf" | tail -1)
@@ -1721,18 +1695,26 @@ _build()
 
 _flash()
 {
-  _build "$1"
-
   if [ "$DEVICE_TYPE" == "pi" ]; then
+    _build "$1"
     ota "-m"
     exit
   fi
 
-  green_echo "Building firmware was successful! Flashing with dfu-util..."
-  echo
   dfu_open
-  sleep 1
 
-  dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN"
-  echo
+  if _build "$1"; then
+    green_echo "Building firmware was successful! Flashing with dfu-util..."
+    echo
+    sleep 1
+    dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN"
+    echo
+  else
+    echo
+    red_echo "Building firmware failed! DFU closed."
+    echo
+    dfu_close
+  fi
+
+  exit
 }

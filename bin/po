@@ -122,13 +122,15 @@ fi
 # po dfu open
 # Put device into DFU mode
 if [ "$1" == "dfu" ] && [ "$2" == "open" ]; then
-    _dfu_open "$3" "$4"
+    dfu_open "$3" "$4"
+    exit
 fi
 
 # po dfu close
 # Get device out of DFU mode
 if [ "$1" == "dfu" ] && [ "$2" == "close" ]; then
-    _dfu_close
+    dfu_close
+    exit
 fi
 
 # po serial open
