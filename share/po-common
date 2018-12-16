@@ -420,7 +420,7 @@ cleanFirmware()
 store_build_parameters() # Keep track of $DEVICE_TYPE and $FIRMWAREDIR
 {
     PARAMETERS="$HOME/.po-util/buildParameters"
-    [[ -f "$PARAMETERS" ]] && . "$PARAMETERS"
+    [[ -f "$PARAMETERS" ]] && source "$PARAMETERS"
     [[ "$STORED_DEVICE_TYPE" != "$DEVICE_TYPE" ]] && DEVICE_TYPE_CHANGED="true"
     [[ "$STORED_FIRMWAREDIR" != "$FIRMWAREDIR" ]] && FIRMWAREDIR_CHANGED="true"
 
@@ -1380,7 +1380,6 @@ _lib-src()
     done
     exit
 }
-
 
 _lib-view-headers()
 {
