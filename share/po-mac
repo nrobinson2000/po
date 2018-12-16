@@ -170,23 +170,23 @@ _update()
     KERNEL="$(uname -s)"
     curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" &> /dev/null &
 
+    if [ "$1" == "particle" ]; then # update just particle firmware
+        echo
+        blue_echo "Updating Particle firmware..."
+        cd "$FIRMWARE_PARTICLE/firmware" || exit
+        git stash &> /dev/null
+        switch_branch &> /dev/null
+        git fetch
+        echo
+        exit
+    fi
+
     if [ "$1" == "duo" ]; then # Update just duo firmware
         echo
         blue_echo "Updating RedBear DUO firmware.."
         cd "$FIRMWARE_DUO/firmware" || exit
         git stash &> /dev/null
         switch_branch "$BRANCH_DUO" &> /dev/null
-        git fetch
-        echo
-        exit
-    fi
-
-    if [ "$1" == "firmware" ]; then # update just particle firmware
-        echo
-        blue_echo "Updating Particle firmware..."
-        cd "$FIRMWARE_PARTICLE/firmware" || exit
-        git stash &> /dev/null
-        switch_branch &> /dev/null
         git fetch
         echo
         exit
@@ -205,17 +205,17 @@ _update()
 
     #update everything if not specified
     echo
-    blue_echo "Updating RedBear DUO firmware..."
-    cd "$FIRMWARE_DUO/firmware" || exit
-    git stash &> /dev/null
-    switch_branch "$BRANCH_DUO" &> /dev/null
-    git fetch
-
-    echo
     blue_echo "Updating Particle firmware..."
     cd "$FIRMWARE_PARTICLE/firmware" || exit
     git stash &> /dev/null
     switch_branch &> /dev/null
+    git fetch
+
+    echo
+    blue_echo "Updating RedBear DUO firmware..."
+    cd "$FIRMWARE_DUO/firmware" || exit
+    git stash &> /dev/null
+    switch_branch "$BRANCH_DUO" &> /dev/null
     git fetch
 
     echo
