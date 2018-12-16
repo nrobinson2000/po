@@ -2,7 +2,7 @@ class Po < Formula
   desc "Particle Offline Utility: The Ultimate Local Particle Experience"
   homepage "https://po-util.com"
   url "https://github.com/nrobinson2000/po/archive/0.6.5.tar.gz"
-  sha256 "b2d86864ae1ff8edf90f362966e559f3805670a2fea2949ee7430e7d9f01d9cc"
+  sha256 "44cc715ea2ab4fd77913f6a58cf647384a6e30af1dda49e4672c555bd2822ca2"
   head "https://github.com/nrobinson2000/po", :using => :git
 
   def install
@@ -14,9 +14,6 @@ class Po < Formula
   end
 
   def caveats; <<~EOS
-    In order to complete the installation of po-util,
-    you must run "po install".
-
     For Raspberry Pi support you must have docker installed.
     EOS
   end
