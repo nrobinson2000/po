@@ -1706,7 +1706,7 @@ _flash()
     green_echo "Building firmware was successful! Flashing with dfu-util..."
     echo
     sleep 1
-    dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN"
+    dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN" && echo && blue_echo "Firmware successfully flashed to $DEVICE_TYPE on $MODEM"
     echo
   else
     echo
