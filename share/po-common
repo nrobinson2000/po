@@ -181,8 +181,7 @@ of your devices on each line."
 
 validateDevicePlatform()
 {
-  # Make sure we are using photon, P1, electron, pi, core, duo
-  # TODO: Add mesh support: xenon, argon, boron
+  # Make sure we are using a valid Particle Device
     if [ "$1" == "photon" ] || [ "$1" == "P1" ] || [ "$1" == "electron" ] || [ "$1" == "pi" ] || [ "$1" == "core" ] || [ "$1" == "duo" ] || [ "$1" == "xenon" ] || [ "$1" == "argon" ] || [ "$1" == "boron" ]; then
         DEVICE_TYPE="$1"
 
@@ -254,10 +253,11 @@ Binary saved to $PROJECTNAME/$TARGET_FILE.bin
 
 dfu_open()
 {
-    DFU_LIST="$(dfu-util -l)"
+  DFU_LIST="$(dfu-util -l | xargs)"
+  DFU_ADDRESS1="${DFU_LIST##*Found DFU: [}"
+  DFU_ADDRESS1="${DFU_ADDRESS1%%]*}"
 
-    # TODO: Clean up this conditional and add mesh devices
-    if echo "$DFU_LIST" | grep "2b04:d006" &> /dev/null || echo "$DFU_LIST" | grep "2b04:d008" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00a" &> /dev/null || echo "$DFU_LIST" | grep "1d50:607f" &> /dev/null || echo "$DFU_LIST" | grep "2b04:d058" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00c" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00e" &> /dev/null ||  echo "$DFU_LIST" | grep "2b04:d00d" &> /dev/null; then
+  if [[ "$DFU_ADDRESS1" =~ 2b04:d0* ]] || [[ "$DFU_ADDRESS1" =~ 1d50:* ]]; then
         blue_echo "
 Already found a device in DFU mode!
 "
@@ -1068,11 +1068,20 @@ _dfu_open()
     exit
 }
 
-_dfu_close() # TODO: Mesh devices need a specific usb id and dfu address for this to work
+_dfu_close()
 {
+  DFU_LIST="$(dfu-util -l | xargs)"
+  DFU_ADDRESS1="${DFU_LIST##*Found DFU: [}"
+  DFU_ADDRESS1="${DFU_ADDRESS1%%]*}"
 
-    dfu-util -d 2b04:D006 -a 0 -i 0 -s 0x080A0000:leave -D /dev/null &> /dev/null
-    exit
+  if [[ "$DFU_ADDRESS1" =~ 2b04:d0* ]] || [[ "$DFU_ADDRESS1" =~ 1d50:* ]]; then
+    dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s 0x00010000:leave -D /dev/null &> /dev/null || dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s 0x080A0000:leave -D /dev/null &> /dev/null
+  else
+    echo
+    red_echo "No Particle Devices in DFU mode found!"
+    echo
+  fi
+  exit
 }
 
 _serial_open()
