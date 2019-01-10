@@ -409,7 +409,7 @@ _stty="custom-baud"
 # Configuration file is created at "~/.po-util/config"
 SETTINGS=~/.po-util/config
 BASE_DIR=~/.po-util/src
-PARTICLE_FIRMWARE_URL="https://github.com/particle-iot/firmware.git"
+PARTICLE_FIRMWARE_URL="https://github.com/particle-iot/device-os.git"
 FIRMWARE_PARTICLE=$BASE_DIR/particle
 FIRMWARE_DUO=$BASE_DIR/redbearduo
 FIRMWARE_PI=$BASE_DIR/pi

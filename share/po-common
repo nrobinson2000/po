@@ -12,6 +12,8 @@
 
 # COMMON
 
+PO_VERSION="0.6.7"
+
 pause()
 {
     read -rp "$*"
@@ -21,7 +23,7 @@ print_logo()
 {
     if [ -t 1 ]; then
         LOGO="
-$(tput setaf 6)$(tput bold)          ______    ______
+$(tput setaf 6)$(tput bold)          ______    ______     $(tput sgr0)$COPYLINE
 $(tput setaf 6)$(tput bold)         /      \  /      \    $(tput sgr0)$TITLELINE
 $(tput setaf 6)$(tput bold)        /██████  |/██████  |
 $(tput setaf 6)$(tput bold)        ██ |  ██ |██ |  ██ |   $(tput sgr0)$USAGELINE
@@ -34,7 +36,7 @@ $(tput setaf 6)$(tput bold)        ██/  $(tput setaf 2)$TEXTLINE$(tput sgr0)
   "
     else
         LOGO="
-          ______    ______
+          ______    ______     $COPYLINE
          /      \  /      \    $TITLELINE
         /██████  |/██████  |
         ██ |  ██ |██ |  ██ |   $USAGELINE
@@ -673,7 +675,7 @@ getLibURL()
 getFirmwareVersions()
 {
   blue_echo "Finding Particle Device OS versions..."
-  curl -s "https://api.github.com/repos/particle-iot/firmware/releases" | grep "tag_name" | grep -Po "v(.*?)(?=\")" | sort -V
+  curl -sL "https://api.github.com/repos/particle-iot/device-os/releases" | grep "tag_name" | grep -Po "v(.*?)(?=\")" | sort -V
   blue_echo "Use one of these versions with 'po config'"
 }
 
@@ -965,7 +967,8 @@ installNodeVersion()
 
 _help()
 {
-    TITLELINE="Copyright (C) 2018 Nathan D. Robinson"
+    COPYLINE="Copyright (C) 2019 Nathan D. Robinson"
+    TITLELINE="Version: $PO_VERSION"
     USAGELINE="Usage: po DEVICE_TYPE COMMAND DEVICE_NAME"
     USAGELINE1="     po DFU_COMMAND"
     USAGELINE2="     po install [full_install_path]"
@@ -1011,7 +1014,7 @@ _info()
     echo "
 $(tput bold)$(tput setaf 3)$(date)$(tput sgr0)
 
-$(tput bold)$(tput setaf 2)- Configured Settings -$(tput sgr0)
+$(tput bold)po-util version: $(tput setaf 6)$PO_VERSION$(tput sgr0)
 
 $(tput bold)Firmware Versions:$(tput sgr0)
 $(tput bold)Particle: $(tput setaf 6)$BRANCH$(tput sgr0)
