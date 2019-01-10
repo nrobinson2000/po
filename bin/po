@@ -69,10 +69,11 @@ if [ "$1" == "config" ]; then
 fi
 
 # Check if we have a saved settings file.  If not, create it.
+# Use defaults: develop duo no
 if [ ! -f "$SETTINGS" ]; then
-    echo
-    blue_echo "Your \"$SETTINGS\" configuration file is missing.  Let's create it!"
-    config
+    # echo
+    # blue_echo "Your \"$SETTINGS\" configuration file is missing.  Let's create it!"
+    config "develop"
 fi
 
 # Import our overrides from the ~/.po-util/config file.
