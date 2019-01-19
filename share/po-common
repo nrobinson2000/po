@@ -12,7 +12,7 @@
 
 # COMMON
 
-PO_VERSION="0.6.7"
+PO_VERSION="0.6.8"
 
 pause()
 {
@@ -1680,6 +1680,122 @@ _clean()
     cleanFirmware
 }
 
+_env-beta()
+{
+  cd "$CWD" || return
+
+  if [ "$1" ]; then
+    PROJECTDIR="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
+  else
+    PROJECTDIR="$CWD"
+  fi
+
+  if [ "$(basename $PROJECTDIR)" == "src" ] && [[ -f "$(cd $PROJECTDIR/.. && basename $PWD).ino" ]]; then
+    PROJECTDIR="$(cd $PROJECTDIR/.. && pwd)"
+  fi
+
+  if [ ! -d "$PROJECTDIR/src" ]; then
+    echo
+    red_echo "Invalid folder!"
+    echo "Please choose a Particle project."
+    echo
+    exit
+  fi
+
+  PARTICLE_MAKEFILE="$BASE_DIR/particle.mk"
+  PARTICLE_CLI_PATH="$(which particle)"
+  DEVICE_OS_PATH="$FIRMWARE_PARTICLE/firmware"
+  APPDIR="$PROJECTDIR"
+  PLATFORM="$DEVICE_TYPE"
+  APPNAME="$(basename $APPDIR)"
+}
+
+store_build_parameters-beta() # Keep track of $DEVICE_TYPE and $FIRMWAREDIR
+{
+    PARAMETERS="$HOME/.po-util/buildParameters-beta"
+    [[ -f "$PARAMETERS" ]] && source "$PARAMETERS"
+    [[ "$STORED_DEVICE_TYPE" != "$DEVICE_TYPE" ]] && DEVICE_TYPE_CHANGED="true"
+    [[ "$STORED_PROJECTDIR" != "$PROJECTDIR" ]] && PROJECTDIR_CHANGED="true"
+
+    if [[ "$STORED_DEVICE_TYPE" != "$DEVICE_TYPE" ]] || [[ "$STORED_PROJECTDIR" != "$PROJECTDIR" ]]; then
+        echo "STORED_DEVICE_TYPE=\"$DEVICE_TYPE\"" > "$PARAMETERS"
+        echo "STORED_PROJECTDIR=\"$PROJECTDIR\"" >> "$PARAMETERS"
+    fi
+
+    if [[ "$DEVICE_TYPE_CHANGED" ]] && [[ "$PROJECTDIR_CHANGED" ]]; then
+        echo
+        blue_echo "Detected change of platform and project. Cleaning before attempting build..."
+        _clean-beta "$1"
+    elif [[ "$DEVICE_TYPE_CHANGED" ]]; then
+        echo
+        blue_echo "Detected change of platform. Cleaning before attempting build..."
+        _clean-beta "$1"
+    elif [[ "$PROJECTDIR_CHANGED" ]]; then
+        echo
+        blue_echo "Detected change of project. Cleaning before attempting build..."
+        _clean-beta "$1"
+    fi
+}
+
+_clean-beta()
+{
+  _env-beta "$1"
+  echo
+  blue_echo "Cleaning firmware..."
+  make -sf "$PARTICLE_MAKEFILE" clean-user PARTICLE_CLI_PATH="$PARTICLE_CLI_PATH" DEVICE_OS_PATH="$DEVICE_OS_PATH" APPDIR="$APPDIR" PLATFORM="$PLATFORM" || return 1
+  blue_echo "Sucessfully cleaned."
+  echo
+}
+
+_build-beta()
+{
+  _env-beta "$1"
+
+  store_build_parameters-beta "$1"
+
+  TITLELINE="Building firmware..."
+  USAGELINE="Build Parameters:"
+  USAGELINE1="$DEVICE_TYPE"
+  USAGELINE2="$(basename $PROJECTDIR)"
+  TEXTLINE="po $DEVICE_TYPE build $USAGELINE2"
+  print_logo
+
+  make -sf "$PARTICLE_MAKEFILE" compile-user PARTICLE_CLI_PATH="$PARTICLE_CLI_PATH" DEVICE_OS_PATH="$DEVICE_OS_PATH" APPDIR="$APPDIR" PLATFORM="$PLATFORM" || return 1
+
+  if [ -f "$APPDIR/target/$APPNAME.elf" ]; then
+    SIZES="$(arm-none-eabi-size $APPDIR/target/$APPNAME.elf | tail -1)"
+    printSizes $SIZES
+    echo
+  fi
+}
+
+_flash-beta()
+{
+  _env-beta "$1"
+
+  store_build_parameters-beta
+
+  TITLELINE="Building firmware..."
+  USAGELINE="Build Parameters:"
+  USAGELINE1="$DEVICE_TYPE"
+  USAGELINE2="$(basename $PROJECTDIR)"
+  TEXTLINE="po $DEVICE_TYPE build $USAGELINE2"
+  print_logo
+
+  dfu_open
+
+  if make -sf "$PARTICLE_MAKEFILE" flash-user PARTICLE_CLI_PATH="$PARTICLE_CLI_PATH" DEVICE_OS_PATH="$DEVICE_OS_PATH" APPDIR="$APPDIR" PLATFORM="$PLATFORM"; then
+    echo
+  else
+    echo
+    red_echo "Building firmware failed! DFU closed."
+    echo
+    dfu_close
+    return 1
+  fi
+}
+
+
 _build()
 {
     DIRWARNING="true"
@@ -1719,4 +1835,45 @@ _flash()
   fi
 
   exit
+}
+
+_run-beta()
+{
+  _env-beta "$2"
+
+  if [ "$1" == "clean-user" ] || [ "$1" == "clean-all" ] || [ "$1" == "clean-debug" ]; then
+    true
+  elif [ "$1" == "compile-user" ] || [ "$1" == "compile-all" ] || [ "$1" == "compile-debug" ]; then
+    true
+  elif [ "$1" == "flash-user" ] || [ "$1" == "flash-all" ] || [ "$1" == "flash-debug" ]; then
+    dfu_open
+  else
+    echo "Invalid option"
+    exit
+  fi
+
+# clean-user
+# clean-all
+# clean-debug
+#
+# compile-user
+# compile-all
+# compile-debug
+#
+# flash-user
+# flash-all
+# flash-debug
+
+  if make -f "$PARTICLE_MAKEFILE" "$1" PARTICLE_CLI_PATH="$PARTICLE_CLI_PATH" DEVICE_OS_PATH="$DEVICE_OS_PATH" APPDIR="$APPDIR" PLATFORM="$PLATFORM"; then
+    echo
+  else
+    if [ "${1%*-*}" == "flash" ]; then
+      echo
+      red_echo "Building firmware failed! DFU closed."
+      echo
+      dfu_close
+    fi
+
+    return 1
+  fi
 }

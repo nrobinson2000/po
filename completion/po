@@ -31,7 +31,7 @@ getModems()
 
 _po-util()
 {
-    local cur prev preprev prepreprev primary device platforms library examples serial safe dfu
+    local cur prev preprev prepreprev primary device platforms library examples serial safe dfu run
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
 
@@ -51,7 +51,7 @@ _po-util()
     primary="reboot create open photon electron P1 pi duo core help setup-atom setup-mesh xenon argon boron
     config info install init safe serial dfu list ls update library lib versions"
 
-    device="init dfu upgrade patch ota build clean flash"
+    device="init dfu upgrade patch ota build clean flash clean-beta build-beta flash-beta run"
 
     platforms="photon electron P1 pi duo core xenon argon boron"
 
@@ -65,6 +65,8 @@ _po-util()
     safe="close open"
 
     dfu="close open"
+
+    run="clean-user clean-all clean-debug compile-user compile-all compile-debug flash-user flash-all flash-debug"
 
     if [[ "$COMP_CWORD" == 1 ]]; then
         COMPREPLY=($(compgen -W "$primary" -- "$cur"))
@@ -98,7 +100,7 @@ _po-util()
         COMPREPLY=( $(compgen -W "$dfu" -- $cur) )
         return 0
 
-   elif [[ $prev == "build" ]] || [[ $prev == "flash" ]] || [[ $prev == "clean" ]] || [[ $prev == "dfu" ]] || [[ $prev == "ota" ]]; then
+   elif [[ $prev == "build" ]] || [[ $prev == "flash" ]] || [[ $prev == "clean" ]] || [[ $prev == "dfu" ]] || [[ $prev == "ota" ]]|| [[ $prev == "clean-beta" ]] || [[ $prev == "build-beta" ]] || [[ $prev == "flash-beta" ]]; then
         COMPREPLY=( $(compgen -d -- $cur) )
         return 0
 
@@ -110,7 +112,7 @@ _po-util()
         COMPREPLY=( $(compgen -W "$library" -- $cur) )
         return 0
 
-    elif [[ $preprev == "clean" ]] && ( [[ $prepreprev == "library" ]] || [[ $prepreprev == "lib" ]]  ) ; then
+    elif [[ $preprev == "clean" ]] && ( [[ $prepreprev == "library" ]] || [[ $prepreprev == "lib" ]]  ); then
         COMPREPLY=( $(compgen -W "-f" -- $cur) )
         return 0
 
@@ -118,15 +120,15 @@ _po-util()
         COMPREPLY=( $(compgen -W "$examples" -- $cur) )
         return 0
 
-    elif [[ $prev == "ls" ]] || [[ $prev == "list" ]] && [[ "$COMP_CWORD" == 4 ]] ; then
+    elif [[ $prev == "ls" ]] || [[ $prev == "list" ]] && [[ "$COMP_CWORD" == 4 ]]; then
         COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
         return 0
 
-    elif [[ $prev == "copy" ]] || [[ $prev == "load" ]] && [[ "$COMP_CWORD" == 4 ]] ; then
+    elif [[ $prev == "copy" ]] || [[ $prev == "load" ]] && [[ "$COMP_CWORD" == 4 ]]; then
         COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
         return 0
 
-    elif [[ $preprev == "copy" ]] || [[ $preprev == "load" ]] && [[ "$COMP_CWORD" == 5 ]] ; then
+    elif [[ $preprev == "copy" ]] || [[ $preprev == "load" ]] && [[ "$COMP_CWORD" == 5 ]]; then
         COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib/$prev/examples)" -- $cur) )
         return 0
 
@@ -171,10 +173,20 @@ _po-util()
         COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
         return 0
 
-    elif [[ $prev == "rm" ]] || [[ $prev == "remove" ]] ; then
+    elif [[ $prev == "rm" ]] || [[ $prev == "remove" ]]; then
         COMPREPLY=( $(compgen -W "$(po get-added-libs)" -- $cur) )
         return 0
+
+    elif [[ $prev = "run" ]]; then
+        COMPREPLY=( $(compgen -W "$run" -- $cur) )
+        return 0
+
+      elif [[ $preprev = "run" ]] && [[ "$COMP_CWORD" == 4 ]]; then
+        COMPREPLY=( $(compgen -d -- $cur) )
+        return 0
+
     fi
+
 }
 
 complete -F _po-util po

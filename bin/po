@@ -324,6 +324,24 @@ if [ "$2" == "ota" ]; then
     exit
 fi
 
+# po DEVICE clean-beta
+if [ "$2" == "clean-beta" ]; then
+    _clean-beta "$3"
+    exit
+fi
+
+# po DEVICE build-beta
+if [ "$2" == "build-beta" ]; then
+    _build-beta "$3"
+    exit
+fi
+
+# po DEVICE flash-beta
+if [ "$2" == "flash-beta" ]; then
+    _flash-beta "$3"
+    exit
+fi
+
 # po DEVICE build
 if [ "$2" == "build" ]; then
     _build "$3"
@@ -333,6 +351,12 @@ fi
 # po DEVICE flash
 if [ "$2" == "flash" ]; then
     _flash "$3"
+    exit
+fi
+
+# po DEVICE run
+if [ "$2" == "run" ]; then
+    _run-beta "$3" "$4"
     exit
 fi
 
