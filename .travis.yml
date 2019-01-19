@@ -22,13 +22,21 @@ install:
   - po info
   - po install
 script:
-  - po init test && cd test
-  - po photon build
-  - po electron build
-  - po P1 build
-  - po core build
+  - po init test
+  - particle project create . --name test-beta
+  - po photon build test
+  - po photon build-beta test-beta
+  - po electron build test
+  - po electron build-beta test-beta
+  - po P1 build test
+  - po P1 build-beta test-beta
+  - po core build test
+  - po core build-beta test-beta
   - po config v0.8.0-rc.27
   - po setup-mesh
-  - po xenon build
-  - po argon build
-  - po boron build
+  - po xenon build test
+  - po xenon build-beta test-beta
+  - po argon build test
+  - po argon build-beta test-beta
+  - po boron build test
+  - po boron build-beta test-beta
