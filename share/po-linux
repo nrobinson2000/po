@@ -175,6 +175,8 @@ _install()
             # cat node-*.txt
             # echo "$DISTRO"
 
+            echo https://"$DISTRO".nodesource.com/"$(cat node-version.txt)"
+
             curl -L https://"$DISTRO".nodesource.com/"$(cat node-version.txt)"
 
             blue_echo "Installing Node.js version $(cat node-version.txt)..."
