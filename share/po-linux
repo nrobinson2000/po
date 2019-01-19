@@ -56,6 +56,9 @@ _install()
     blue_echo "Installing bash completion for po..."
     sudo curl -fsSLo /etc/bash_completion.d/po https://raw.githubusercontent.com/nrobinson2000/po/master/completion/po
 
+    # create base dir
+    [ -d "$BASE_DIR" ] || mkdir -p "$BASE_DIR"  # If BASE_DIR does not exist, create it
+    
     # create doc dir
     [ -d "$HOME/.po-util/doc" ] || mkdir -p "$HOME/.po-util/doc"  # If BASE_DIR does not exist, create it
 

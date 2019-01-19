@@ -26,6 +26,9 @@ _install()
         exit
     fi
 
+    # create base dir
+    [ -d "$BASE_DIR" ] || mkdir -p "$BASE_DIR"  # If BASE_DIR does not exist, create it
+
     # create doc dir
     [ -d "$HOME/.po-util/doc" ] || mkdir -p "$HOME/.po-util/doc"  # If BASE_DIR does not exist, create it
 
@@ -41,8 +44,6 @@ _install()
         echo BASE_DIR="$BASE_DIR" > "$SETTINGS"
     fi
 
-    # create base dir
-    [ -d "$BASE_DIR" ] || mkdir -p "$BASE_DIR"  # If BASE_DIR does not exist, create it
     # create Particle dir
     [ -d "$FIRMWARE_PARTICLE" ] || mkdir -p "$FIRMWARE_PARTICLE"  # If FIRMWARE_PARTICLE does not exist, create it
     # create redbearduo dir
