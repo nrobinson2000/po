@@ -56,17 +56,11 @@ _install()
     blue_echo "Installing bash completion for po..."
     sudo curl -fsSLo /etc/bash_completion.d/po https://raw.githubusercontent.com/nrobinson2000/po/master/completion/po
 
-    # create base dir
-    [ -d "$BASE_DIR" ] || mkdir -p "$BASE_DIR"  # If BASE_DIR does not exist, create it
-    
     # create doc dir
     [ -d "$HOME/.po-util/doc" ] || mkdir -p "$HOME/.po-util/doc"  # If BASE_DIR does not exist, create it
 
     # Download po-README.md
     curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
-
-    # Download particle.mk
-    curl -fsSLo ~/.po-util/src/particle.mk https://raw.githubusercontent.com/nrobinson2000/po/master/share/particle.mk
 
     # Check to see if we need to override the install directory.
     if [ "$1" ] && [ "$1" != "$BASE_DIR" ]; then
@@ -82,6 +76,9 @@ _install()
     [ -d "$FIRMWARE_DUO" ] || mkdir -p "$FIRMWARE_DUO"  # If FIRMWARE_DUO does not exist, create it
     # create raspberry-pi dir
     [ -d "$FIRMWARE_PI" ] || mkdir -p "$FIRMWARE_PI"  # If FIRMWARE_PI does not exist, create it
+
+    # Download particle.mk
+    curl -fsSLo ~/.po-util/src/particle.mk https://raw.githubusercontent.com/nrobinson2000/po/master/share/particle.mk
 
     LIBRARY=~/.po-util/lib # Create library directory
     if [ -d "$LIBRARY" ]; then    # if it is not found.

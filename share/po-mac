@@ -26,17 +26,11 @@ _install()
         exit
     fi
 
-    # create base dir
-    [ -d "$BASE_DIR" ] || mkdir -p "$BASE_DIR"  # If BASE_DIR does not exist, create it
-
     # create doc dir
     [ -d "$HOME/.po-util/doc" ] || mkdir -p "$HOME/.po-util/doc"  # If BASE_DIR does not exist, create it
 
     # Download po-README.md
     curl -fsSLo ~/.po-util/doc/po-README.md https://raw.githubusercontent.com/nrobinson2000/po/master/po-README.md
-
-    # Download particle.mk
-    curl -fsSLo ~/.po-util/src/particle.mk https://raw.githubusercontent.com/nrobinson2000/po/master/share/particle.mk
 
     # Check to see if we need to override the install directory.
     if [ "$1" ] && [ "$1" != "$BASE_DIR" ]; then
@@ -44,12 +38,17 @@ _install()
         echo BASE_DIR="$BASE_DIR" > "$SETTINGS"
     fi
 
+    # create base dir
+    [ -d "$BASE_DIR" ] || mkdir -p "$BASE_DIR"  # If BASE_DIR does not exist, create it
     # create Particle dir
     [ -d "$FIRMWARE_PARTICLE" ] || mkdir -p "$FIRMWARE_PARTICLE"  # If FIRMWARE_PARTICLE does not exist, create it
     # create redbearduo dir
     [ -d "$FIRMWARE_DUO" ] || mkdir -p "$FIRMWARE_DUO"  # If FIRMWARE_DUO does not exist, create it
     # create raspberry-pi dir
     [ -d "$FIRMWARE_PI" ] || mkdir -p "$FIRMWARE_PI"  # If FIRMWARE_PI does not exist, create it
+
+    # Download particle.mk
+    curl -fsSLo ~/.po-util/src/particle.mk https://raw.githubusercontent.com/nrobinson2000/po/master/share/particle.mk
 
     # Enable bash completion
     grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.profile" &> /dev/null|| echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.profile"
