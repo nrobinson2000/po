@@ -172,8 +172,8 @@ _install()
             tail -1 node-files.txt > node-oneline.txt
             sed -n 's/.*\"\(.*.\)\".*/\1/p' node-oneline.txt > node-version.txt
 
-            # cat node-*.txt
-            # echo "$DISTRO"
+            cat node-*.txt
+            echo "$DISTRO"
 
             echo https://"$DISTRO".nodesource.com/"$(cat node-version.txt)"
 
