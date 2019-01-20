@@ -144,6 +144,8 @@ _install()
 
     # Install dependencies
 
+    mkdir -p $BINDIR
+
     if hash arm-none-eabi-gcc &> /dev/null; then #Test for arm-none-eabi-gcc
         blue_echo "ARM toolchain version $GCC_ARM_VER is already installed... Continuing..."
     else
