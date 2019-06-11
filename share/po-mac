@@ -71,19 +71,19 @@ _install()
     cd "$FIRMWARE_PARTICLE" || exit
     echo
     blue_echo "Installing Particle firmware from Github..."
-    git clone "$PARTICLE_FIRMWARE_URL" "firmware" || ( cd firmware && git stash &> /dev/null && git fetch )
+    git clone --recurse-submodules "$PARTICLE_FIRMWARE_URL" "firmware" || ( cd firmware && git stash &> /dev/null && git fetch )
 
     # clone RedBear DUO firmware repository
     cd "$FIRMWARE_DUO" || exit
     echo
     blue_echo "Installing RedBear Duo firmware from Github..."
-    git clone https://github.com/redbear/firmware.git || ( cd firmware && git stash &> /dev/null && git fetch )
+    git clone --recurse-submodules https://github.com/redbear/firmware.git || ( cd firmware && git stash &> /dev/null && git fetch )
 
     # clone Particle-Pi firmware repository
     cd "$FIRMWARE_PI" || exit
     echo
     blue_echo "Installing Particle-Pi firmware from Github..."
-    git clone https://github.com/particle-iot/firmware.git || ( cd firmware && git stash &> /dev/null && git fetch )
+    git clone --recurse-submodules https://github.com/particle-iot/firmware.git || ( cd firmware && git stash &> /dev/null && git fetch )
 
     echo
 

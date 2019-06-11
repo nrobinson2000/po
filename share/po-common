@@ -697,9 +697,9 @@ getLib() # "$i" "$LIB_NAME"
             GIT_ARGS=( $1 )
 
             if [ "${GIT_ARGS[1]}" == "" ]; then
-                git clone "${GIT_ARGS[0]}" || ( echo ; red_echo "Could not download Library. Please supply a valid URL to a git repository." )
+                git clone --recurse-submodules "${GIT_ARGS[0]}" || ( echo ; red_echo "Could not download Library. Please supply a valid URL to a git repository." )
             else
-                git clone "${GIT_ARGS[0]}" "${GIT_ARGS[1]}" || ( echo ; red_echo "Could not download Library. Please supply a valid URL to a git repository." )
+                git clone --recurse-submodules "${GIT_ARGS[0]}" "${GIT_ARGS[1]}" || ( echo ; red_echo "Could not download Library. Please supply a valid URL to a git repository." )
             fi
         else
             echo
@@ -712,7 +712,7 @@ getLib() # "$i" "$LIB_NAME"
                 if [ "$answer" == "yes" ] || [ "$answer" == "y" ] || [ "$answer" == "Y" ]; then
                     echo
                     cd "$LIBRARY" || exit
-                    git clone "$LIBURL" "$LIB_QUERY"
+                    git clone --recurse-submodules "$LIBURL" "$LIB_QUERY"
                     echo
                     blue_echo "Downloaded $LIB_QUERY from GitHub."
                     return 0
