@@ -12,7 +12,7 @@
 
 # COMMON
 
-PO_VERSION="0.6.8"
+PO_VERSION="7.0.0"
 
 pause()
 {
