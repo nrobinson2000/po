@@ -949,9 +949,9 @@ getNodeLTSVersion()
     NODEVERSION=$(curl -sL https://nodejs.org/en/ | grep " LTS" | tail -1 | xargs)
     NODEVERSION=${NODEVERSION%% *}
 
-    if [[ ${#NODEVERSION} -ge 7 ]] || [[ ${#NODEVERSION} -le 4 ]] ; then
-        NODEVERSION="8.9.1" # Fallback
-    fi
+    # if [[ ${#NODEVERSION} -ge 7 ]] || [[ ${#NODEVERSION} -le 4 ]] ; then
+    #     NODEVERSION="8.9.1" # Fallback
+    # fi
 
     NODEVERSION="v$NODEVERSION"
     INSTALLVERSION="node-$NODEVERSION"
