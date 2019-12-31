@@ -18,7 +18,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash -x ci/mac ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash -x ci/linux ; fi
   - po
-  - po config v1.0.0
+  - po config release/stable
   - po info
   - po install
 script:
@@ -32,8 +32,6 @@ script:
   - po P1 build-beta test-beta
   - po core build test
   - po core build-beta test-beta
-  - po config v0.8.0-rc.27
-  - po setup-mesh
   - po xenon build test
   - po xenon build-beta test-beta
   - po argon build test
