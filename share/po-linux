@@ -170,7 +170,7 @@ _install()
         if [ "$(hash node &> /dev/null && node -v)" == "$NODEVERSION" ]; then
             blue_echo "Node.js version $NODEVERSION is already installed."
         else
-            curl -Ss https://api.github.com/repos/nodesource/distributions/contents/"$DISTRO" | grep "name"  | grep "setup_"| grep -v "setup_iojs"| grep -v "setup_dev" > node-files.txt
+            curl -Ss https://api.github.com/repos/nodesource/distributions/contents/"$DISTRO" | grep "name" | grep "setup_" | grep -v "setup_iojs" | grep -v "setup_dev" | sort --field-separator="_" --key=2 --human-numeric-sort > node-files.txt
             tail -1 node-files.txt > node-oneline.txt
             sed -n 's/.*\"\(.*.\)\".*/\1/p' node-oneline.txt > node-version.txt
 
