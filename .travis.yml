@@ -30,8 +30,6 @@ script:
   - po electron build-beta test-beta
   - po P1 build test
   - po P1 build-beta test-beta
-  - po core build test
-  - po core build-beta test-beta
   - po xenon build test
   - po xenon build-beta test-beta
   - po argon build test
