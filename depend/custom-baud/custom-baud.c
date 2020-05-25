@@ -19,9 +19,10 @@ custom-baud
  */
  
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <stropts.h>
 #include <asm/termios.h>
 
 int main(int argc, char* argv[]) {
@@ -38,7 +39,7 @@ int main(int argc, char* argv[]) {
     ioctl(fd, TCGETS2, &tio);
     tio.c_cflag &= ~CBAUD;
     tio.c_cflag |= BOTHER;
-    // tio.c_ispeed = rate;
+    tio.c_ispeed = rate;
     tio.c_ospeed = rate;
     int r = ioctl(fd, TCSETS2, &tio);
     close(fd);
