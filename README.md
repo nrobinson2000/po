@@ -1,3 +1,5 @@
+# This tool has been deprecated. Please upgrade to [neopo.](https://github.com/nrobinson2000/neopo)
+
 <img src="po-logo.png">
 
 [![Build Status](https://travis-ci.org/nrobinson2000/po.svg?branch=master)](https://travis-ci.org/nrobinson2000/po)
